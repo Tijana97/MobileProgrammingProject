@@ -1,5 +1,6 @@
 package com.example.givinghand.datasource
 
+import com.example.givinghand.R
 import com.example.givinghand.model.ActionItem
 import com.example.givinghand.model.User
 
@@ -11,7 +12,7 @@ object DataSource {
             address = "Kolodvorska 12, Sarajevo 71000",
             description = "Collecting donations for building a women's shelter.",
             currentVolunteers = 0,
-            picture = "tobe",
+            picture = R.drawable.redcross,
             maxVolunteers = 2147483647,
             date = "Unknown"
         ),
@@ -21,7 +22,7 @@ object DataSource {
             address = "Zmaja od Bosne bb, 71000 Sarajevo",
             description = "Donate to help with medical bills for children in need.",
             currentVolunteers = 0,
-            picture = "tobe",
+            picture = R.drawable.srcezadejcu,
             maxVolunteers = 2147483647,
             date = "Unknown"
         ),
@@ -31,7 +32,7 @@ object DataSource {
             address = "Hamdije Čemerlića 39a, 71000 Sarajevo",
             description = "Donate to  to provide relief from the conditions of extreme poverty beset on the city of Sarajevo.",
             currentVolunteers = 0,
-            picture = "tobe",
+            picture = R.drawable.savesarajevo,
             maxVolunteers = 2147483647,
             date = "Unknown"
         ),
@@ -41,7 +42,7 @@ object DataSource {
             address = "Ahmeda Muradbegovića 1c, Sarajevo",
             description = "Donate to help children and youth who are in risk and without parental guidance.",
             currentVolunteers = 0,
-            picture = "tobe",
+            picture = R.drawable.sos,
             maxVolunteers = 2147483647,
             date = "Unknown"
         ),
@@ -55,7 +56,7 @@ object DataSource {
             description = "Accompany us to walk and play with animals living in our shelter",
             currentVolunteers = 0,
             maxVolunteers = 50,
-            picture = "tobe",
+            picture = R.mipmap.sos_foreground,
             date = "25.05.2023 12:00-16:00"
 
         ),
@@ -66,7 +67,7 @@ object DataSource {
             description = "Volunteer in our ZOO and help feed and care for our animals",
             currentVolunteers = 0,
             maxVolunteers = 100,
-            picture = "tobe",
+            picture = R.mipmap.sos_foreground,
             date = "17.07.2023 10:00-18:00"
 
         ),
@@ -77,7 +78,7 @@ object DataSource {
             description = "Join us in caring for animals and making the world cruelty-free, safe space for them",
             currentVolunteers = 0,
             maxVolunteers = 20,
-            picture = "tobe",
+            picture = R.mipmap.sos_foreground,
             date = "20.06.2023 16:00-19:30"
         ),
     )
@@ -90,7 +91,7 @@ object DataSource {
             description = "Join a project of cleaning Sarajevo from trash and help the community.",
             currentVolunteers = 0,
             maxVolunteers = 15,
-            picture = "tobe",
+            picture = R.mipmap.sos_foreground,
             date = "14.08.2023 10:00-16:30"
         ),
         ActionItem.EnvironmentActionItem(
@@ -100,7 +101,7 @@ object DataSource {
             description = "Become a part of a group of volunteers with the aim of planting healthy, young trees in the parks of Zagreb.",
             currentVolunteers = 0,
             maxVolunteers = 20,
-            picture = "tobe",
+            picture = R.mipmap.sos_foreground,
             date = "17.06.2023 14:00-16:30"
         ),
         ActionItem.EnvironmentActionItem(
@@ -110,7 +111,7 @@ object DataSource {
             description = "Join us in clearing our mountains and rivers from trash that has been accumulating over the years.",
             currentVolunteers = 0,
             maxVolunteers = 27,
-            picture = "tobe",
+            picture = R.mipmap.sos_foreground,
             date = "14.08.2023 10:00-18:00"
         ),
         ActionItem.EnvironmentActionItem(
@@ -120,7 +121,7 @@ object DataSource {
             description = "Help us clean our neighborhood and make it a good place for people to live in.",
             currentVolunteers = 0,
             maxVolunteers = 35,
-            picture = "tobe",
+            picture = R.mipmap.sos_foreground,
             date = "22.07.2023 11:00-15:00"
         ),
     )
@@ -133,7 +134,7 @@ object DataSource {
             description = "Join us and help elderly people by doing their shopping and everyday chores.",
             currentVolunteers = 0,
             maxVolunteers = 30,
-            picture = "tobe",
+            picture = R.mipmap.sos_foreground,
             date = "04.07.2023 10:00-12:00"
         ),
         ActionItem.SocialActionItem(
@@ -143,7 +144,7 @@ object DataSource {
             description = "Become a tutor and help children with understand and learn.",
             currentVolunteers = 0,
             maxVolunteers = 10,
-            picture = "tobe",
+            picture = R.mipmap.sos_foreground,
             date = "08.06.2023 08:00-14:00"
         ),
         ActionItem.SocialActionItem(
@@ -153,7 +154,7 @@ object DataSource {
             description = "Become a volunteer for SFF and help in festival realization.",
             currentVolunteers = 0,
             maxVolunteers = 45,
-            picture = "tobe",
+            picture = R.mipmap.sos_foreground,
             date = "12.08.2023 09:00-20:30"
         ),
 

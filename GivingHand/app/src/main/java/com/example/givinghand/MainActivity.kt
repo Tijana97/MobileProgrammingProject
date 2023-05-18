@@ -4,12 +4,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.givinghand.datasource.DataSource.DonateActionItems
+import com.example.givinghand.model.ActionItem
+import com.example.givinghand.ui.theme.ActionList
 import com.example.givinghand.ui.theme.GivingHandTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    GivingHandApp()
                 }
             }
         }
@@ -30,14 +35,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+fun GivingHandApp(){
+    val actions = DonateActionItems
+    ActionList(actions = actions, Modifier.padding(8.dp))
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     GivingHandTheme {
-        Greeting("Android")
+        GivingHandApp()
     }
 }

@@ -9,7 +9,7 @@ sealed class ActionItem(
     open var address: String,
     open var description: String,
     open var currentVolunteers: Int,
-    open var picture: String,
+    open var picture: Int,
     open var date: String
 ){
     data class DonateActionItem(
@@ -19,7 +19,7 @@ sealed class ActionItem(
         override var address: String,
         override var description: String,
         override var currentVolunteers: Int,
-        override var picture: String,
+        override var picture: Int,
         override var date: String
     ) : ActionItem(id, name, maxVolunteers, address, description, currentVolunteers, picture, date)
 
@@ -30,7 +30,7 @@ sealed class ActionItem(
         override var address: String,
         override var description: String,
         override var currentVolunteers: Int,
-        override var picture: String,
+        override var picture: Int,
         override var date: String
     ) : ActionItem(id, name, maxVolunteers, address, description, currentVolunteers, picture, date)
 
@@ -42,7 +42,7 @@ sealed class ActionItem(
         override var address: String,
         override var description: String,
         override var currentVolunteers: Int,
-        override var picture: String,
+        override var picture: Int,
         override var date: String
     ) : ActionItem(id, name, maxVolunteers, address, description, currentVolunteers, picture, date)
 
@@ -54,7 +54,7 @@ sealed class ActionItem(
         override var address: String,
         override var description: String,
         override var currentVolunteers: Int,
-        override var picture: String,
+        override var picture: Int,
         override var date: String
     ) : ActionItem(id, name, maxVolunteers, address, description, currentVolunteers, picture, date)
 
