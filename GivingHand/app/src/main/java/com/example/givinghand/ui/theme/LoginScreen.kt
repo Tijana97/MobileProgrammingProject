@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -80,7 +79,7 @@ fun LoginScreen(
             Button(
                 onClick = {
                     if(confirmUnauthorizedUser(username.value, password.value))
-                        onSubmitButtonClicked
+                        onSubmitButtonClicked()
 
                 },
                 shape = RoundedCornerShape(50.dp),
@@ -99,9 +98,9 @@ private fun confirmUnauthorizedUser(
     password: TextFieldValue
 ): Boolean {
     UnauthorizedUsers.forEach { user -> if(
-        user.username.equals(username.text)
+        user.username ==username.text
     ){
-        if(user.password.equals(password.text)){
+        if(user.password==password.text){
             return true
         }
     }
@@ -115,9 +114,9 @@ private fun confirmAuthorizedUser(
     password: TextFieldValue
 ): Boolean {
     AuthorizedUsers.forEach { user -> if(
-        user.username.equals(username.text)
+        user.username ==username.text
     ){
-        if(user.password.equals(password.text)){
+        if(user.password==password.text){
             return true
         }
     }
