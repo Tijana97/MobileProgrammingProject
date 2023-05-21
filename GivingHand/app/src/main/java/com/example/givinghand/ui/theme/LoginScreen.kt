@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -34,6 +35,7 @@ fun LoginScreen(
     onSubmitButtonClicked: () -> Unit
 
 ) {
+    val loginMessage = remember { mutableStateOf("") }
     Box(modifier = Modifier.fillMaxSize()) {
         ClickableText(
             text = AnnotatedString("Sign up here"),
@@ -73,13 +75,27 @@ fun LoginScreen(
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             onValueChange = { password.value = it })
+        if (loginMessage.value.isNotBlank()) {
+            Text(
+                text = loginMessage.value,
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.Default,
+                    color = Color.Red
+                ),
+                modifier = Modifier.padding(top = 4.dp),
+            )
+        }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(30.dp))
         Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
             Button(
                 onClick = {
                     if(confirmUnauthorizedUser(username.value, password.value))
                         onSubmitButtonClicked()
+                    else
+                        loginMessage.value = "Incorrect username or password"
+
 
                 },
                 shape = RoundedCornerShape(50.dp),
@@ -89,6 +105,7 @@ fun LoginScreen(
             ) {
                 Text(text = "Login")
             }
+
         }
     }
 }
