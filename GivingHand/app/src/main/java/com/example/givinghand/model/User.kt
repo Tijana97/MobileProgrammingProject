@@ -16,7 +16,8 @@ sealed class User(
         override var email: String,
         override val name: String,
         override var address: String,
-        override val authorized: Boolean
+        override val authorized: Boolean,
+        var userActions: List<Int>
     ) : User(id, username, password, email, name, address, authorized)
 
     data class AuthorizedUser(

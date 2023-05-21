@@ -168,7 +168,8 @@ object DataSource {
             email = "johndoe@gmail.com",
             name = "John Doe",
             address = "Baker Street 22",
-            authorized = false
+            authorized = false,
+            userActions = mutableListOf()
         ),
         User.UnauthorizedUser(
             id = 2,
@@ -177,7 +178,8 @@ object DataSource {
             email = "tombrown@gmail.com",
             name = "Tom Brown",
             address = "La Rambla 13",
-            authorized = false
+            authorized = false,
+            userActions = mutableListOf()
         ),
         User.UnauthorizedUser(
             id = 3,
@@ -186,7 +188,8 @@ object DataSource {
             email = "janedoe@gmail.com",
             name = "Jane Doe",
             address = "Sutjeska 1",
-            authorized = false
+            authorized = false,
+            userActions = mutableListOf()
         ),
     )
 
@@ -198,7 +201,7 @@ object DataSource {
             email = "saranalo@gmail.com",
             name = "Sara Nalo",
             address = "Alije Nametka 22, Sarajevo",
-            authorized = false
+            authorized = true
         ),
         User.AuthorizedUser(
             id = 2,
@@ -207,7 +210,7 @@ object DataSource {
             email = "aminatpkvs@gmail.com",
             name = "Amina Tupković",
             address = "Dobrinjska 45",
-            authorized = false
+            authorized = true
         ),
         User.AuthorizedUser(
             id = 3,
@@ -216,7 +219,7 @@ object DataSource {
             email = "burtijana@gmail.com",
             name = "Tijana Burazorović",
             address = "Džemala Bijedića 62",
-            authorized = false
+            authorized = true
         ),
     )
 
