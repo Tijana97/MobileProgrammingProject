@@ -1,4 +1,4 @@
-package com.example.givinghand.model
+package com.example.givinghand.data
 
 
 

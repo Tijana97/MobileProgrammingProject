@@ -20,15 +20,18 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.givinghand.R
-import com.example.givinghand.model.ActionItem
+import com.example.givinghand.data.Action
+import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun ActionListItem(action: ActionItem.DonateActionItem, modifier: Modifier = Modifier){
+fun ActionListItem(action: Action, modifier: Modifier = Modifier){
     Card(){
         Row(){
             Column(){
@@ -39,7 +42,7 @@ fun ActionListItem(action: ActionItem.DonateActionItem, modifier: Modifier = Mod
                 Text(text = action.date)
             }
             Spacer(modifier = Modifier.width(16.dp))
-            Image(painter = painterResource(id = action.picture), contentDescription = null)
+            Image(painter = painterResource(id = R.drawable.sos), contentDescription = null)
         }
 
     }
@@ -48,12 +51,15 @@ fun ActionListItem(action: ActionItem.DonateActionItem, modifier: Modifier = Mod
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ActionList(actions: MutableList<ActionItem.DonateActionItem>, modifier: Modifier=Modifier){
+fun ActionList(actions: Flow<List<Action>>, modifier: Modifier = Modifier) {
     val visibleState = remember {
         MutableTransitionState(false).apply {
             targetState = true
         }
     }
+
+    val actionListState by actions.collectAsState(initial = emptyList())
+
     AnimatedVisibility(
         visibleState = visibleState,
         enter = fadeIn(
@@ -61,11 +67,9 @@ fun ActionList(actions: MutableList<ActionItem.DonateActionItem>, modifier: Modi
         ),
         exit = fadeOut(),
         modifier = Modifier
-    )
-    {
-        LazyColumn{
-            itemsIndexed(actions){
-                index, action ->
+    ) {
+        LazyColumn {
+            itemsIndexed(actionListState) { index, action ->
                 ActionListItem(
                     action = action,
                     modifier = modifier
@@ -76,13 +80,11 @@ fun ActionList(actions: MutableList<ActionItem.DonateActionItem>, modifier: Modi
                                     stiffness = Spring.StiffnessVeryLow,
                                     dampingRatio = Spring.DampingRatioLowBouncy
                                 ),
-                                initialOffsetY = { it * (index+1)}
-
+                                initialOffsetY = { it * (index + 1) }
                             )
                         )
                 )
             }
         }
     }
-
 }

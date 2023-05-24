@@ -18,7 +18,8 @@ import com.example.givinghand.R
 
 @Composable
 fun WelcomeScreen(
-    onStartOrderButtonClicked: () -> Unit,
+    onLoginButtonClicked: () -> Unit,
+    onSignupButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -27,10 +28,16 @@ fun WelcomeScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Button(
-            onClick = onStartOrderButtonClicked,
+            onClick = onLoginButtonClicked,
             Modifier.widthIn(min = 250.dp)
         ) {
-            Text(stringResource(R.string.welcome))
+            Text("Log in")
+        }
+        Button(
+            onClick = onSignupButtonClicked,
+            Modifier.widthIn(min = 250.dp)
+        ) {
+            Text("Sign Up")
         }
     }
 }
@@ -39,7 +46,8 @@ fun WelcomeScreen(
 @Composable
 fun StartOrderPreview(){
     WelcomeScreen(
-        onStartOrderButtonClicked = {},
+        onLoginButtonClicked = {},
+        onSignupButtonClicked = {},
         modifier = Modifier
             .padding(16.dp)
             .fillMaxSize()

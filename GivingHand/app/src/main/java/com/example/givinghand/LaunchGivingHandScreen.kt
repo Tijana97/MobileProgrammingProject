@@ -2,6 +2,7 @@
 
 package com.example.givinghand
 
+import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 
@@ -17,18 +18,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.givinghand.datasource.DataSource
-import com.example.givinghand.model.UserUIState
+import com.example.givinghand.data.UserUIState
 import com.example.givinghand.ui.theme.ActionList
+import com.example.givinghand.ui.theme.ActionViewModel
 import com.example.givinghand.ui.theme.LoginScreen
+import com.example.givinghand.ui.theme.SignUpScreen
 import com.example.givinghand.ui.theme.UserViewModel
 import com.example.givinghand.ui.theme.WelcomeScreen
 
@@ -79,16 +82,16 @@ fun LaunchGivingHandAppBar(
 @Composable
 fun LunchGivingHandApp() {
     // TODO: Create Controller and initialization
+
+    val actionViewModel: ActionViewModel = viewModel(
+        factory = ActionViewModel.factory,
+        viewModelStoreOwner = LocalViewModelStoreOwner.current!!
+    )
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = LaunchGivingHandScreen.valueOf(
         backStackEntry?.destination?.route ?: LaunchGivingHandScreen.Start.name
     )
-
-    val viewModel: UserViewModel = viewModel()
-
-
-
 
     Scaffold(
         topBar = {
@@ -101,7 +104,6 @@ fun LunchGivingHandApp() {
             )
         }
     ) { innerPadding ->
-        val uiState: UserUIState by viewModel.uiState.collectAsState()
 
         // TODO: Navigation host
         NavHost(
@@ -111,8 +113,11 @@ fun LunchGivingHandApp() {
         ) {
             composable(route = LaunchGivingHandScreen.Start.name) {
                 WelcomeScreen(
-                    onStartOrderButtonClicked = {
+                    onLoginButtonClicked = {
                         navController.navigate(LaunchGivingHandScreen.Login.name)
+                    },
+                    onSignupButtonClicked = {
+                        navController.navigate(LaunchGivingHandScreen.Signup.name)
                     }
                 )
             }
@@ -125,8 +130,17 @@ fun LunchGivingHandApp() {
                 )
             }
 
+            composable(route = LaunchGivingHandScreen.Signup.name) {
+
+                SignUpScreen(
+                    onSubmitButtonClicked = {
+                        navController.navigate(LaunchGivingHandScreen.DonateActions.name)
+                    }
+                )
+            }
+
             composable(route = LaunchGivingHandScreen.DonateActions.name) {
-                val actions = DataSource.DonateActionItems
+                val actions = actionViewModel.getAllActions()
                 ActionList(actions = actions, Modifier.padding(8.dp))
             }
         }
