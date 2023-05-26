@@ -9,19 +9,19 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,17 +29,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.givinghand.LaunchGivingHandScreen
 import com.example.givinghand.R
 import com.example.givinghand.data.Action
 import kotlinx.coroutines.flow.Flow
 
 @Composable
-fun ActionListItem(action: Action, modifier: Modifier = Modifier){
+fun AdminActionListItem(action: Action,
+                        modifier: Modifier = Modifier,
+                        onAddItemButtonClicked: () -> Unit
+){
     Card(){
         Row(modifier = Modifier.fillMaxWidth()){
-            Image(painter = painterResource(id = R.drawable.sos), contentDescription = null)
             Spacer(modifier = Modifier.width(16.dp))
+            Image(painter = painterResource(id = R.drawable.sos), contentDescription = null)
             Column(modifier = Modifier.fillMaxWidth()){
                 Text(
                     text = action.name
@@ -48,19 +50,17 @@ fun ActionListItem(action: Action, modifier: Modifier = Modifier){
                 Text(text = action.date)
             }
 
-
         }
 
     }
 
 }
 
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ActionList(actions: Flow<List<Action>>,
-               modifier: Modifier = Modifier,
-               onShowActonClicked: (action: Action) -> Unit
+fun AdminActionList(actions: Flow<List<Action>>,
+                    modifier: Modifier = Modifier,
+                    onAddItemButtonClicked: () -> Unit
 ) {
     val visibleState = remember {
         MutableTransitionState(false).apply {
@@ -78,23 +78,33 @@ fun ActionList(actions: Flow<List<Action>>,
         exit = fadeOut(),
         modifier = Modifier
     ) {
-        LazyColumn {
-            itemsIndexed(actionListState) { index, action ->
-                ActionListItem(
-                    action = action,
-                    modifier = modifier
-                        .padding(horizontal = 16.dp, vertical = 16.dp)
-                        .clickable(onClick = { onShowActonClicked(action)  })
-                        .animateEnterExit(
-                            enter = slideInVertically(
-                                animationSpec = spring(
-                                    stiffness = Spring.StiffnessVeryLow,
-                                    dampingRatio = Spring.DampingRatioLowBouncy
-                                ),
-                                initialOffsetY = { it * (index + 1) }
+        Column() {
+            androidx.compose.material3.Button(
+                onClick = onAddItemButtonClicked,
+                Modifier.widthIn(min = 250.dp)
+            ) {
+                Text("Add Action")
+            }
+
+            LazyColumn {
+
+                itemsIndexed(actionListState) { index, action ->
+                    AdminActionListItem(
+                        action = action,
+                        onAddItemButtonClicked = onAddItemButtonClicked,
+                        modifier = modifier
+                            .padding(horizontal = 16.dp, vertical = 16.dp)
+                            .animateEnterExit(
+                                enter = slideInVertically(
+                                    animationSpec = spring(
+                                        stiffness = Spring.StiffnessVeryLow,
+                                        dampingRatio = Spring.DampingRatioLowBouncy
+                                    ),
+                                    initialOffsetY = { it * (index + 1) }
+                                )
                             )
-                        )
-                )
+                    )
+                }
             }
         }
     }
