@@ -45,35 +45,34 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 
 
-enum class LaunchGivingHandScreen(@StringRes val title: Int) {
-    Start(title = R.string.app_name),
-    Login(title = R.string.log_in),
-    AdminLogin(title = R.string.admin_log_in),
-    AdminActions(title = R.string.admin_actions),
-    Signup(title = R.string.sign_up),
-    ChooseCategory(title = R.string.choose_action_type),
-    EditAction(title = R.string.edit_action),
-    AddAction(title = R.string.add_action),
-    AddActionType(title = R.string.add_action_type),
-    ShowAction(title = R.string.show_action),
-    DonateActions(title = R.string.display_donate_actions),
-    SocialActions(title = R.string.display_donate_actions),
-    EnvironmentActions(title = R.string.display_environment_actions),
-    AnimalActions(title = R.string.display_animal_care_actions),
-    AllActions(title = R.string.display_actions),
-    ShowUser(title = R.string.show_user)
+enum class LaunchGivingHandScreen() {
+    Start(),
+    Login(),
+    AdminLogin(),
+    AdminActions(),
+    Signup(),
+    ChooseCategory(),
+    EditAction(),
+    AddAction(),
+    AddActionType(),
+    ShowAction(),
+    DonateActions(),
+    SocialActions(),
+    EnvironmentActions(),
+    AnimalActions(),
+    AllActions(),
+    ShowUser()
 }
 
 
 @Composable
 fun LaunchGivingHandAppBar(
-    @StringRes currentScreenTitle: Int,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        title = { Text(stringResource(currentScreenTitle)) },
+        title = {},
         modifier = modifier,
         navigationIcon = {
             if (canNavigateBack) {
@@ -109,7 +108,6 @@ fun LunchGivingHandApp() {
             // TODO: AppBar
 
             LaunchGivingHandAppBar(
-                currentScreenTitle = currentScreen.title,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() }
             )

@@ -2,6 +2,7 @@ package com.example.givinghand.ui.theme
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,16 +14,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -36,6 +41,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.givinghand.R
 import com.example.givinghand.data.AppDatabase
 import com.example.givinghand.data.User
 import com.example.givinghand.datasource.DataSource.AuthorizedUsers
@@ -66,35 +72,61 @@ fun SignUpScreen(
         val address = remember { mutableStateOf(TextFieldValue()) }
         val coroutineScope = userViewModel.viewModelScope
 
+        Image(painter = painterResource(R.drawable._144_removebg_preview), contentDescription = "")
 
-        Text(text = "Sing up", style = TextStyle(fontSize = 40.sp, fontFamily = FontFamily.Cursive))
-
-        Spacer(modifier = Modifier.height(20.dp))
         TextField(
             label = { Text(text = "Name") },
             value = name.value,
-            onValueChange = { name.value = it })
+            onValueChange = { name.value = it },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.LightGray, // Change background color
+                cursorColor = Color.DarkGray, // Change cursor color
+                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
+                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+            ),
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
             label = { Text(text = "Username") },
             value = username.value,
-            onValueChange = { username.value = it })
+            onValueChange = { username.value = it },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.LightGray, // Change background color
+                cursorColor = Color.DarkGray, // Change cursor color
+                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
+                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+            ),
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
             label = { Text(text = "Address") },
             value = address.value,
-            onValueChange = { address.value = it })
+            onValueChange = { address.value = it },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.LightGray, // Change background color
+                cursorColor = Color.DarkGray, // Change cursor color
+                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
+                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+            ),
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         TextField(
             label = { Text(text = "Email") },
             value = email.value,
-            onValueChange = { email.value = it })
+            onValueChange = { email.value = it },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.LightGray, // Change background color
+                cursorColor = Color.DarkGray, // Change cursor color
+                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
+                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+            ),
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -103,7 +135,14 @@ fun SignUpScreen(
             value = password.value,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            onValueChange = { password.value = it })
+            onValueChange = { password.value = it },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.LightGray, // Change background color
+                cursorColor = Color.DarkGray, // Change cursor color
+                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
+                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+            ),
+        )
 
 
         if (loginMessage.value.isNotBlank()) {
@@ -146,7 +185,8 @@ fun SignUpScreen(
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp)
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
             ) {
                 Text(text = "Sign up")
             }

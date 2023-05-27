@@ -11,22 +11,22 @@ object DataSource {
         Category(
             id = 1,
             name = "Donate",
-            picture = R.drawable.sos
+            picture = R.drawable.donate
         ),
         Category(
             id = 2,
             name = "Animal Care",
-            picture = R.drawable.sos
+            picture = R.drawable.animal
         ),
         Category(
             id = 3,
             name = "Environment",
-            picture = R.drawable.sos
+            picture = R.drawable.env
         ),
         Category(
             id = 4,
             name = "Social",
-            picture = R.drawable.sos
+            picture = R.drawable.social
         ),
     )
 

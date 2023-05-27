@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Card
@@ -16,15 +17,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.givinghand.R
 import com.example.givinghand.data.Action
+import com.example.givinghand.data.Category
+import com.example.givinghand.datasource.DataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 
 @Composable
 fun ShowAction(action: Flow<List<Action>>, modifier: Modifier = Modifier){
-    Card(){
+    Card(
+        modifier = Modifier.padding(8.dp)
+    ){
         Row(modifier = Modifier.fillMaxWidth()){
-            Image(painter = painterResource(id = R.drawable.sos), contentDescription = null)
+            Image(painter = painterResource(id = R.drawable.social), contentDescription = null)
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.fillMaxWidth()){
                 Text(text = "action.name")
@@ -33,7 +38,9 @@ fun ShowAction(action: Flow<List<Action>>, modifier: Modifier = Modifier){
                 Text(text = "action.address")
                 Text(text = "action.date")
             }
+
         }
+
         androidx.compose.material3.Button(
             onClick = {},
             Modifier.widthIn(min = 250.dp)

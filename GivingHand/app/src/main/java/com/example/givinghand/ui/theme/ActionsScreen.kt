@@ -36,7 +36,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun ActionListItem(action: Action, modifier: Modifier = Modifier){
-    Card(){
+    Card(
+        modifier = Modifier.padding(8.dp)
+    ){
         Row(modifier = Modifier.fillMaxWidth()){
             Image(painter = painterResource(id = R.drawable.sos), contentDescription = null)
             Spacer(modifier = Modifier.width(16.dp))
@@ -51,7 +53,9 @@ fun ActionListItem(action: Action, modifier: Modifier = Modifier){
 
         }
 
+
     }
+
 
 }
 
@@ -84,7 +88,7 @@ fun ActionList(actions: Flow<List<Action>>,
                     action = action,
                     modifier = modifier
                         .padding(horizontal = 16.dp, vertical = 16.dp)
-                        .clickable(onClick = { onShowActonClicked(action)  })
+                        .clickable(onClick = { onShowActonClicked(action) })
                         .animateEnterExit(
                             enter = slideInVertically(
                                 animationSpec = spring(

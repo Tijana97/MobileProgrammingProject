@@ -20,13 +20,17 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.givinghand.R
@@ -38,7 +42,9 @@ fun AdminActionListItem(action: Action,
                         modifier: Modifier = Modifier,
                         onAddItemButtonClicked: () -> Unit
 ){
-    Card(){
+    Card(
+        modifier = Modifier.padding(8.dp)
+    ){
         Row(modifier = Modifier.fillMaxWidth()){
             Spacer(modifier = Modifier.width(16.dp))
             Image(painter = painterResource(id = R.drawable.sos), contentDescription = null)
@@ -81,7 +87,8 @@ fun AdminActionList(actions: Flow<List<Action>>,
         Column() {
             androidx.compose.material3.Button(
                 onClick = onAddItemButtonClicked,
-                Modifier.widthIn(min = 250.dp)
+                Modifier.widthIn(min = 250.dp).align(CenterHorizontally),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
             ) {
                 Text("Add Action")
             }
