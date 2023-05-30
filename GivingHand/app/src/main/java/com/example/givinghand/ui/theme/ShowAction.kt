@@ -17,6 +17,8 @@ import androidx.compose.material.Text
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -24,6 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.givinghand.R
 import com.example.givinghand.data.Action
 import com.example.givinghand.data.Category
@@ -34,8 +38,15 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
-fun ShowAction(action: Action, modifier: Modifier = Modifier){
+fun ShowAction(actionId: Int, modifier: Modifier = Modifier){
+    val actionViewModel: ActionViewModel = viewModel(
+        factory = ActionViewModel.factory,
+        viewModelStoreOwner = LocalViewModelStoreOwner.current!!
+    )
+    val actions by actionViewModel.getActionById(actionId).collectAsState(initial = emptyList())
+    val action = actions.firstOrNull()
     Column(
+
         modifier = Modifier.padding(8.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -50,11 +61,14 @@ fun ShowAction(action: Action, modifier: Modifier = Modifier){
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.fillMaxWidth()
                 .padding(28.dp)){
-                Text(text = action.name)
-                Text(text = action.description)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = action.address)
-                Text(text = action.date)
+                if (action != null) {
+                    Text(text = action.name)
+                    Text(text = action.description)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = action.address)
+                    Text(text = action.date)
+                }
+
             }
 
         }
@@ -77,9 +91,4 @@ class ActionsFlowProvider : PreviewParameterProvider<Flow<List<Action>>> {
         flowOf(emptyList()) // Provide an empty flow
     )
 }
-@Preview(showBackground = true)
-@Composable
-fun ShowActionPreview(@PreviewParameter(ActionsFlowProvider::class) actionFlow: Flow<List<Action>>) {
-    // Call the ShowAction composable with the provided actionFlow
-    ShowAction(action = sampleAction)
-}
+

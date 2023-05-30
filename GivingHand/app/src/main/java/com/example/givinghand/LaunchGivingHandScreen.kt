@@ -3,27 +3,23 @@
 package com.example.givinghand
 
 
-import android.content.Context
-import androidx.annotation.StringRes
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 
 import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.TopAppBar
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,12 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.example.givinghand.data.Action
-import com.example.givinghand.datasource.DataSource
-import com.example.givinghand.data.UserUIState
-import com.example.givinghand.datasource.DataSource.ActionItems
 
 import com.example.givinghand.ui.theme.ActionList
 import com.example.givinghand.ui.theme.ActionViewModel
@@ -48,10 +39,7 @@ import com.example.givinghand.ui.theme.LoginAdminScreen
 import com.example.givinghand.ui.theme.LoginScreen
 import com.example.givinghand.ui.theme.ShowAction
 import com.example.givinghand.ui.theme.SignUpScreen
-import com.example.givinghand.ui.theme.UserViewModel
 import com.example.givinghand.ui.theme.WelcomeScreen
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 
 
 enum class LaunchGivingHandScreen() {
@@ -70,30 +58,41 @@ enum class LaunchGivingHandScreen() {
     EnvironmentActions(),
     AnimalActions(),
     AllActions(),
-    ShowUser()
+    ShowUser(),
+
 }
 
 
 @Composable
 fun LaunchGivingHandAppBar(
+    title: String,
     canNavigateBack: Boolean,
-    navigateUp: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
+
 ) {
-    TopAppBar(
-        title = {},
-        modifier = modifier,
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back_button)
-                    )
-                }
-            }
+        if (canNavigateBack) {
+            TopAppBar(
+                title = { Text(title) },
+                navigationIcon = {
+                    androidx.compose.material3.IconButton(onClick = onBackClick) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back"
+
+                            )
+
+                    }
+                },
+                modifier = modifier
+            )
+        } else {
+            TopAppBar(
+                title = { Text(title) },
+                modifier = modifier
+            )
         }
-    )
+
 }
 
 
@@ -106,20 +105,25 @@ fun LaunchGivingHandApp() {
         factory = ActionViewModel.factory,
         viewModelStoreOwner = LocalViewModelStoreOwner.current!!
     )
+    val appBarTitle = stringResource(R.string.app_name)
+    var topAppBarTitle by remember { mutableStateOf(appBarTitle) }
     val navController = rememberNavController()
 
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = LaunchGivingHandScreen.valueOf(
-        backStackEntry?.destination?.route ?: LaunchGivingHandScreen.Start.name
-    )
+    val onBackHandler = {
+        topAppBarTitle = appBarTitle
+        navController.navigateUp()
+    }
 
     Scaffold(
         topBar = {
             // TODO: AppBar
 
             LaunchGivingHandAppBar(
+                title = topAppBarTitle,
                 canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() }
+                onBackClick = { onBackHandler() }
+
+
             )
         }
     ) { innerPadding ->
@@ -134,12 +138,15 @@ fun LaunchGivingHandApp() {
                 WelcomeScreen(
                     onLoginButtonClicked = {
                         navController.navigate(LaunchGivingHandScreen.Login.name)
+                        topAppBarTitle = "Log In"
                     },
                     onLoginAdminButtonClicked = {
                         navController.navigate(LaunchGivingHandScreen.AdminLogin.name)
+                        topAppBarTitle = "Log In as Admin"
                     },
                     onSignupButtonClicked = {
                         navController.navigate(LaunchGivingHandScreen.Signup.name)
+                        topAppBarTitle = "Sign Up"
                     }
                 )
             }
@@ -148,6 +155,7 @@ fun LaunchGivingHandApp() {
                 LoginScreen(
                     onSubmitButtonClicked = {
                         navController.navigate(LaunchGivingHandScreen.ChooseCategory.name)
+                        topAppBarTitle = "Select Category"
                     }
                 )
             }
@@ -155,6 +163,7 @@ fun LaunchGivingHandApp() {
                 LoginAdminScreen(
                     onSubmitButtonClicked = {
                         navController.navigate(LaunchGivingHandScreen.AdminActions.name)
+                        topAppBarTitle = "Actions"
                     }
                 )
             }
@@ -164,6 +173,7 @@ fun LaunchGivingHandApp() {
                 SignUpScreen(
                     onSubmitButtonClicked = {
                         navController.navigate(LaunchGivingHandScreen.ChooseCategory.name)
+                        topAppBarTitle = "Select Category"
                     }
                 )
             }
@@ -171,20 +181,27 @@ fun LaunchGivingHandApp() {
 
             composable(route = LaunchGivingHandScreen.ChooseCategory.name) {
                 CategoriesScreen(
-                    onAllActionsClicked = { navController.navigate(LaunchGivingHandScreen.AllActions.name) },
-                    onDonateActionsClicked = { navController.navigate(LaunchGivingHandScreen.DonateActions.name) },
-                    onAnimalCareActionsClicked = { navController.navigate(LaunchGivingHandScreen.AnimalActions.name) },
-                    onEnvironmentalActionsClicked = { navController.navigate(LaunchGivingHandScreen.EnvironmentActions.name) },
-                    onSocialActionsClicked = { navController.navigate(LaunchGivingHandScreen.SocialActions.name) })
+                    onAllActionsClicked = { navController.navigate(LaunchGivingHandScreen.AllActions.name)
+                        topAppBarTitle = "All Actions"},
+                    onDonateActionsClicked = { navController.navigate(LaunchGivingHandScreen.DonateActions.name)
+                        topAppBarTitle = "Donate Actions"},
+                    onAnimalCareActionsClicked = { navController.navigate(LaunchGivingHandScreen.AnimalActions.name)
+                        topAppBarTitle = "Animal Care Actions"},
+                    onEnvironmentalActionsClicked = { navController.navigate(LaunchGivingHandScreen.EnvironmentActions.name)
+                        topAppBarTitle = "Environmental Actions"},
+                    onSocialActionsClicked = { navController.navigate(LaunchGivingHandScreen.SocialActions.name)
+                        topAppBarTitle = "Social Actions"})
             }
 
 
 
-           composable(route = LaunchGivingHandScreen.AllActions.name) {
+            composable(route = LaunchGivingHandScreen.AllActions.name) {
                 val actions = actionViewModel.getAllActions()
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
-                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action.id}")
+                        val actionId = action.id.toString()
+                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/$actionId")
+                        topAppBarTitle = action.name
                     })
             }
 
@@ -192,7 +209,9 @@ fun LaunchGivingHandApp() {
                 val actions = actionViewModel.getActionByCategory(category_id = 1)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
-                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action?.id}")
+                        val actionId = action.id.toString()
+                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/$actionId")
+                        topAppBarTitle = action.name
                     })
             }
 
@@ -200,7 +219,10 @@ fun LaunchGivingHandApp() {
                 val actions = actionViewModel.getActionByCategory(category_id = 2)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
-                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action?.id}")
+                        val actionId = action.id.toString()
+                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/$actionId")
+                        topAppBarTitle = action.name
+
                     })
             }
 
@@ -208,7 +230,9 @@ fun LaunchGivingHandApp() {
                 val actions = actionViewModel.getActionByCategory(category_id = 3)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
-                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action?.id}")
+                        val actionId = action.id.toString()
+                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/$actionId")
+                        topAppBarTitle = action.name
                     })
             }
 
@@ -216,15 +240,21 @@ fun LaunchGivingHandApp() {
                 val actions = actionViewModel.getActionByCategory(category_id = 4)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
-                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action?.id}")
+                        val actionId = action.id.toString()
+                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/$actionId")
+                        topAppBarTitle = action.name
                     })
             }
-
-            composable(route = "${LaunchGivingHandScreen.ShowAction.name}/${id}") {
-                val action = actionViewModel.getActionById(id)
-                ShowAction(action = ActionItems[id] , modifier = Modifier)
-
+            val tempActionId = "temp"
+            composable(
+                route = LaunchGivingHandScreen.ShowAction.name + "/{$tempActionId}",
+                arguments = listOf(navArgument(tempActionId) { defaultValue = "1" })
+            ) { backStackEntry ->
+                val actionIdTemp = backStackEntry.arguments?.getString(tempActionId)!!.toInt()
+                ShowAction(actionIdTemp, modifier = Modifier)
             }
+
+
 
             composable(route = LaunchGivingHandScreen.AdminActions.name) {
                 val actions = actionViewModel.getAllActions()
