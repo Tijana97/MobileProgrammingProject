@@ -7,7 +7,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
+
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -68,7 +73,7 @@ fun LoginScreen(
             label = { Text(text = "Username") },
             value = username.value,
             onValueChange = { username.value = it },
-            colors = TextFieldDefaults.textFieldColors(
+            colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
                 focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
@@ -83,7 +88,7 @@ fun LoginScreen(
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             onValueChange = { password.value = it },
-            colors = TextFieldDefaults.textFieldColors(
+            colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
                 focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
@@ -118,7 +123,7 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
             ) {
                 Text(text = "Login")
             }

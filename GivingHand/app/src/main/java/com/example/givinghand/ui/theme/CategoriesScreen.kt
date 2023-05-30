@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.Button
+
+import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -51,7 +54,7 @@ fun CategoriesScreen(
                 .widthIn(min = 350.dp)
                 .height(70.dp)
                 .padding(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
         ) {
             Text("All Actions")
         }
@@ -61,7 +64,7 @@ fun CategoriesScreen(
                 .widthIn(min = 350.dp)
                 .height(70.dp)
                 .padding(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
         ) {
             Text("Donate Actions")
         }
@@ -71,7 +74,7 @@ fun CategoriesScreen(
                 .widthIn(min = 350.dp)
                 .height(70.dp)
                 .padding(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
         ) {
             Text("Animal Care Actions")
         }
@@ -81,7 +84,7 @@ fun CategoriesScreen(
                 .widthIn(min = 350.dp)
                 .height(70.dp)
                 .padding(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
         ) {
             Text("Environmental Actions")
         }
@@ -91,7 +94,7 @@ fun CategoriesScreen(
                 .widthIn(min = 350.dp)
                 .height(70.dp)
                 .padding(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
         ) {
             Text("Social Actions")
         }

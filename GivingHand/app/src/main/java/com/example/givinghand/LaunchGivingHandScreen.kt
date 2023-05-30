@@ -2,9 +2,14 @@
 
 package com.example.givinghand
 
+
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
+
+import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
+import androidx.compose.material.TopAppBar
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -28,9 +33,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.givinghand.data.Action
 import com.example.givinghand.datasource.DataSource
 import com.example.givinghand.data.UserUIState
+import com.example.givinghand.datasource.DataSource.ActionItems
+
 import com.example.givinghand.ui.theme.ActionList
 import com.example.givinghand.ui.theme.ActionViewModel
 import com.example.givinghand.ui.theme.AdminActionList
@@ -90,7 +99,7 @@ fun LaunchGivingHandAppBar(
 
 
 @Composable
-fun LunchGivingHandApp() {
+fun LaunchGivingHandApp() {
     // TODO: Create Controller and initialization
 
     val actionViewModel: ActionViewModel = viewModel(
@@ -98,6 +107,7 @@ fun LunchGivingHandApp() {
         viewModelStoreOwner = LocalViewModelStoreOwner.current!!
     )
     val navController = rememberNavController()
+
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = LaunchGivingHandScreen.valueOf(
         backStackEntry?.destination?.route ?: LaunchGivingHandScreen.Start.name
@@ -168,19 +178,21 @@ fun LunchGivingHandApp() {
                     onSocialActionsClicked = { navController.navigate(LaunchGivingHandScreen.SocialActions.name) })
             }
 
-            composable(route = LaunchGivingHandScreen.AllActions.name) {
+
+
+           composable(route = LaunchGivingHandScreen.AllActions.name) {
                 val actions = actionViewModel.getAllActions()
                 ActionList(actions = actions, Modifier.padding(8.dp),
-                onShowActonClicked = { action ->
-                    navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action.id}")
-                })
+                    onShowActonClicked = { action ->
+                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action.id}")
+                    })
             }
 
             composable(route = LaunchGivingHandScreen.DonateActions.name) {
                 val actions = actionViewModel.getActionByCategory(category_id = 1)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
-                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action.id}")
+                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action?.id}")
                     })
             }
 
@@ -188,7 +200,7 @@ fun LunchGivingHandApp() {
                 val actions = actionViewModel.getActionByCategory(category_id = 2)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
-                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action.id}")
+                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action?.id}")
                     })
             }
 
@@ -196,7 +208,7 @@ fun LunchGivingHandApp() {
                 val actions = actionViewModel.getActionByCategory(category_id = 3)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
-                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action.id}")
+                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action?.id}")
                     })
             }
 
@@ -204,13 +216,13 @@ fun LunchGivingHandApp() {
                 val actions = actionViewModel.getActionByCategory(category_id = 4)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
-                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action.id}")
+                        navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/${action?.id}")
                     })
             }
 
             composable(route = "${LaunchGivingHandScreen.ShowAction.name}/${id}") {
                 val action = actionViewModel.getActionById(id)
-                ShowAction(action = action, modifier = Modifier)
+                ShowAction(action = ActionItems[id] , modifier = Modifier)
 
             }
 

@@ -30,4 +30,6 @@ data class Action(
     @ColumnInfo(name="date") var date: String,
     @NonNull
     @ColumnInfo(name="category_id") val category_id: Int
-)
+) {
+
+}

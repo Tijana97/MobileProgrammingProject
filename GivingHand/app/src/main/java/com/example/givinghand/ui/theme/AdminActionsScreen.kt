@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
+
+import androidx.compose.material.Text
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -88,7 +90,7 @@ fun AdminActionList(actions: Flow<List<Action>>,
             androidx.compose.material3.Button(
                 onClick = onAddItemButtonClicked,
                 Modifier.widthIn(min = 250.dp).align(CenterHorizontally),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
             ) {
                 Text("Add Action")
             }
