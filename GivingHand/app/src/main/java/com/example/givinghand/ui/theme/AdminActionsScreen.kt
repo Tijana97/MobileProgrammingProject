@@ -42,6 +42,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterStart
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun AdminActionListItem(action: Action,
@@ -50,41 +51,40 @@ fun AdminActionListItem(action: Action,
                         onShowActonClickedAdmin: (action: Action) -> Unit
 ){
     Card(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier.padding(20.dp),
     ){
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally) {
-            Row(modifier = Modifier.fillMaxWidth()){
-                Spacer(modifier = Modifier.width(16.dp))
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(30.dp)){
                 Image(painter = painterResource(id = R.drawable.sos), contentDescription = null)
+                Spacer(modifier = Modifier.width(16.dp))
                 Column(modifier = Modifier.fillMaxWidth()){
                     Text(
-                        text = action.name
+                        text = action.name,
+                        fontWeight = FontWeight.Bold
                     )
                     Text(text = action.address)
                     Text(text = action.date)
                 }
-
             }
-            Spacer(modifier = Modifier.height(20.dp))
+
             Button(
                 onClick = { onShowActonClickedAdmin(action) },
                 shape = RoundedCornerShape(50.dp),
                 modifier = Modifier
                     .width(100.dp)
                     .height(50.dp)
-                    .padding(8.dp)
                 ,
                 colors = ButtonDefaults.buttonColors(containerColor = Green500)
             ) {
                 Text("Go")
             }
+            Spacer(modifier = Modifier.height(20.dp))
         }
-
-
     }
-
 }
 
 @OptIn(ExperimentalAnimationApi::class)

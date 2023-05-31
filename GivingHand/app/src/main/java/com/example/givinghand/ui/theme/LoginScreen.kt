@@ -65,29 +65,37 @@ fun LoginScreen(
         Image(painter = painterResource(R.drawable._144_removebg_preview), contentDescription = "")
 
         TextField(
-            label = { Text(text = "Username") },
+            label = { Text(
+                text = "Username",
+                color = Color.DarkGray
+            ) },
             value = username.value,
             onValueChange = { username.value = it },
+            shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
-                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
-                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+                focusedIndicatorColor = Color.Transparent, // Change focused indicator color
+                unfocusedIndicatorColor = Color.Transparent, // Change unfocused indicator color
             ),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
-            label = { Text(text = "Password") },
+            label = { Text(
+                text = "Password",
+                color = Color.DarkGray
+            ) },
             value = password.value,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             onValueChange = { password.value = it },
+            shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
-                focusedIndicatorColor = Green500, // Change focused indicator color
-                unfocusedIndicatorColor = Green500, // Change unfocused indicator color
+                focusedIndicatorColor = Color.Transparent, // Change focused indicator color
+                unfocusedIndicatorColor = Color.Transparent, // Change unfocused indicator color
             ),
         )
         if (loginMessage.value.isNotBlank()) {

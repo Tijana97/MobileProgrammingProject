@@ -38,21 +38,21 @@ fun WelcomeScreen(
         Button(
             onClick = onLoginButtonClicked,
             Modifier.widthIn(min = 250.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Green500)
+            colors = ButtonDefaults.buttonColors(containerColor = Green700)
         ) {
             Text("Log in")
         }
         Button(
             onClick = onLoginAdminButtonClicked,
             Modifier.widthIn(min = 250.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Green500)
+            colors = ButtonDefaults.buttonColors(containerColor = Green700)
         ) {
             Text("Log in as Admin")
         }
         Button(
             onClick = onSignupButtonClicked,
             Modifier.widthIn(min = 250.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Green500)
+            colors = ButtonDefaults.buttonColors(containerColor = Green700)
         ) {
             Text("Sign Up")
         }

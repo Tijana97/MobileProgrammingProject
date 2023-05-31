@@ -70,90 +70,120 @@ fun AddActionScreen(
         val context = LocalContext.current
 
         TextField(
-            label = { Text(text = "Name") },
+            label = { Text(
+                text = "Name",
+                color = Color.DarkGray
+            ) },
             value = name.value,
             onValueChange = { name.value = it },
+            shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
-                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
-                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+                focusedIndicatorColor = Color.Transparent, // Change focused indicator color
+                unfocusedIndicatorColor = Color.Transparent, // Change unfocused indicator color
             ),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
-            label = { Text(text = "Max number of volunteers") },
+            label = { Text(
+                text = "Max number of volunteers",
+                color = Color.DarkGray
+            ) },
             value = max_volunteers.value,
             onValueChange = { max_volunteers.value = it },
+            shape = RoundedCornerShape(20.dp),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
-                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
-                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+                focusedIndicatorColor = Color.Transparent, // Change focused indicator color
+                unfocusedIndicatorColor = Color.Transparent, // Change unfocused indicator color
             ),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
-            label = { Text(text = "Address") },
+            label = { Text(
+                text = "Address",
+                color = Color.DarkGray
+            ) },
             value = address.value,
             onValueChange = { address.value = it },
+            shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
-                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
-                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+                focusedIndicatorColor = Color.Transparent, // Change focused indicator color
+                unfocusedIndicatorColor = Color.Transparent, // Change unfocused indicator color
             ),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
-            label = { Text(text = "Description") },
+            label = { Text(
+                text = "Description",
+                color = Color.DarkGray
+            ) },
             value = description.value,
             onValueChange = { description.value = it },
+            shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
-                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
-                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+                focusedIndicatorColor = Color.Transparent, // Change focused indicator color
+                unfocusedIndicatorColor = Color.Transparent, // Change unfocused indicator color
             ),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
-            label = { Text(text = "Current number of volunteers") },
+            label = { Text(
+                text = "Current number of volunteers",
+                color = Color.DarkGray
+            ) },
             value = current_volunteers.value,
+            shape = RoundedCornerShape(20.dp),
             onValueChange = { current_volunteers.value = it },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
-                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
-                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+                focusedIndicatorColor = Color.Transparent, // Change focused indicator color
+                unfocusedIndicatorColor = Color.Transparent, // Change unfocused indicator color
             ),
         )
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
-            label = { Text(text = "Date") },
+            label = { Text(
+                text = "Date",
+                color = Color.DarkGray
+            ) },
             value = date.value,
             onValueChange = { date.value = it },
+            shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
-                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
-                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+                focusedIndicatorColor = Color.Transparent, // Change focused indicator color
+                unfocusedIndicatorColor = Color.Transparent, // Change unfocused indicator color
             ),
         )
         Spacer(modifier = Modifier.height(20.dp))
         TextField(
-            label = { Text(text = "Type of action") },
+            label = { Text(
+                text = "Type of action",
+                color = Color.DarkGray
+            ) },
             value = category_id.value,
             onValueChange = { category_id.value = it },
+            shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
-                focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
-                unfocusedIndicatorColor = MaterialTheme.colors.primary, // Change unfocused indicator color
+                focusedIndicatorColor = Color.Transparent, // Change focused indicator color
+                unfocusedIndicatorColor = Color.Transparent, // Change unfocused indicator color
             ),
         )
 
