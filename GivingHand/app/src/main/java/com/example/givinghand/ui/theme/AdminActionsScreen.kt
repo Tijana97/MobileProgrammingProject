@@ -9,20 +9,20 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-
-import androidx.compose.material.Text
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,27 +38,50 @@ import androidx.compose.ui.unit.dp
 import com.example.givinghand.R
 import com.example.givinghand.data.Action
 import kotlinx.coroutines.flow.Flow
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterStart
 
 @Composable
 fun AdminActionListItem(action: Action,
                         modifier: Modifier = Modifier,
-                        onAddItemButtonClicked: () -> Unit
+                        onAddItemButtonClicked: () -> Unit,
+                        onShowActonClickedAdmin: (action: Action) -> Unit
 ){
     Card(
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.padding(8.dp),
     ){
-        Row(modifier = Modifier.fillMaxWidth()){
-            Spacer(modifier = Modifier.width(16.dp))
-            Image(painter = painterResource(id = R.drawable.sos), contentDescription = null)
-            Column(modifier = Modifier.fillMaxWidth()){
-                Text(
-                    text = action.name
-                )
-                Text(text = action.address)
-                Text(text = action.date)
-            }
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Row(modifier = Modifier.fillMaxWidth()){
+                Spacer(modifier = Modifier.width(16.dp))
+                Image(painter = painterResource(id = R.drawable.sos), contentDescription = null)
+                Column(modifier = Modifier.fillMaxWidth()){
+                    Text(
+                        text = action.name
+                    )
+                    Text(text = action.address)
+                    Text(text = action.date)
+                }
 
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(
+                onClick = { onShowActonClickedAdmin(action) },
+                shape = RoundedCornerShape(50.dp),
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(50.dp)
+                    .padding(8.dp)
+                ,
+                colors = ButtonDefaults.buttonColors(containerColor = Green500)
+            ) {
+                Text("Go")
+            }
         }
+
 
     }
 
@@ -68,7 +91,8 @@ fun AdminActionListItem(action: Action,
 @Composable
 fun AdminActionList(actions: Flow<List<Action>>,
                     modifier: Modifier = Modifier,
-                    onAddItemButtonClicked: () -> Unit
+                    onAddItemButtonClicked: () -> Unit,
+                    onShowActonClickedAdmin: (action: Action) -> Unit
 ) {
     val visibleState = remember {
         MutableTransitionState(false).apply {
@@ -89,8 +113,10 @@ fun AdminActionList(actions: Flow<List<Action>>,
         Column() {
             androidx.compose.material3.Button(
                 onClick = onAddItemButtonClicked,
-                Modifier.widthIn(min = 250.dp).align(CenterHorizontally),
-                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+                Modifier
+                    .widthIn(min = 250.dp)
+                    .align(CenterHorizontally),
+                colors = ButtonDefaults.buttonColors(containerColor = Green500)
             ) {
                 Text("Add Action")
             }
@@ -101,6 +127,7 @@ fun AdminActionList(actions: Flow<List<Action>>,
                     AdminActionListItem(
                         action = action,
                         onAddItemButtonClicked = onAddItemButtonClicked,
+                        onShowActonClickedAdmin = onShowActonClickedAdmin,
                         modifier = modifier
                             .padding(horizontal = 16.dp, vertical = 16.dp)
                             .animateEnterExit(

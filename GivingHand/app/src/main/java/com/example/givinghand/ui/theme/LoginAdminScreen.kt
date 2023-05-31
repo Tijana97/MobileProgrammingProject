@@ -10,12 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -70,7 +65,7 @@ fun LoginAdminScreen(
             label = { Text(text = "Admin Username") },
             value = username.value,
             onValueChange = { username.value = it },
-            colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
+            colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
                 focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
@@ -85,7 +80,7 @@ fun LoginAdminScreen(
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             onValueChange = { password.value = it },
-            colors = androidx.compose.material3.TextFieldDefaults.textFieldColors(
+            colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color
                 cursorColor = Color.DarkGray, // Change cursor color
                 focusedIndicatorColor = MaterialTheme.colors.primary, // Change focused indicator color
@@ -120,7 +115,7 @@ fun LoginAdminScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+                colors = ButtonDefaults.buttonColors(containerColor = Green500)
             ) {
                 Text(text = "Login as Admin")
             }

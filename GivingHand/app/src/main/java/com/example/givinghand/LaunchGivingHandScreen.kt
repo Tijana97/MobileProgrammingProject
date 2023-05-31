@@ -2,20 +2,20 @@
 
 package com.example.givinghand
 
-
-import android.util.Log
+import android.content.Context
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
-
-import androidx.compose.material.IconButton
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,16 +30,23 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.navArgument
-
+import com.example.givinghand.data.Action
+import com.example.givinghand.datasource.DataSource
+import com.example.givinghand.data.UserUIState
 import com.example.givinghand.ui.theme.ActionList
 import com.example.givinghand.ui.theme.ActionViewModel
+import com.example.givinghand.ui.theme.AddActionScreen
 import com.example.givinghand.ui.theme.AdminActionList
 import com.example.givinghand.ui.theme.CategoriesScreen
 import com.example.givinghand.ui.theme.LoginAdminScreen
 import com.example.givinghand.ui.theme.LoginScreen
 import com.example.givinghand.ui.theme.ShowAction
+import com.example.givinghand.ui.theme.ShowActionAdmin
 import com.example.givinghand.ui.theme.SignUpScreen
+import com.example.givinghand.ui.theme.UserViewModel
 import com.example.givinghand.ui.theme.WelcomeScreen
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 
 
 enum class LaunchGivingHandScreen() {
@@ -53,6 +60,7 @@ enum class LaunchGivingHandScreen() {
     AddAction(),
     AddActionType(),
     ShowAction(),
+    ShowActionAdmin(),
     DonateActions(),
     SocialActions(),
     EnvironmentActions(),
@@ -71,27 +79,27 @@ fun LaunchGivingHandAppBar(
     modifier: Modifier = Modifier
 
 ) {
-        if (canNavigateBack) {
-            TopAppBar(
-                title = { Text(title) },
-                navigationIcon = {
-                    androidx.compose.material3.IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back"
+    if (canNavigateBack) {
+        TopAppBar(
+            title = { Text(title) },
+            navigationIcon = {
+                androidx.compose.material3.IconButton(onClick = onBackClick) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back"
 
-                            )
+                    )
 
-                    }
-                },
-                modifier = modifier
-            )
-        } else {
-            TopAppBar(
-                title = { Text(title) },
-                modifier = modifier
-            )
-        }
+                }
+            },
+            modifier = modifier
+        )
+    } else {
+        TopAppBar(
+            title = { Text(title) },
+            modifier = modifier
+        )
+    }
 
 }
 
@@ -247,11 +255,11 @@ fun LaunchGivingHandApp() {
             }
             val tempActionId = "temp"
             composable(
-                route = LaunchGivingHandScreen.ShowAction.name + "/{$tempActionId}",
+                route = LaunchGivingHandScreen.ShowActionAdmin.name + "/{$tempActionId}",
                 arguments = listOf(navArgument(tempActionId) { defaultValue = "1" })
             ) { backStackEntry ->
                 val actionIdTemp = backStackEntry.arguments?.getString(tempActionId)!!.toInt()
-                ShowAction(actionIdTemp, modifier = Modifier)
+                ShowActionAdmin(actionIdTemp, modifier = Modifier)
             }
 
 
@@ -259,8 +267,22 @@ fun LaunchGivingHandApp() {
             composable(route = LaunchGivingHandScreen.AdminActions.name) {
                 val actions = actionViewModel.getAllActions()
                 AdminActionList(actions = actions, Modifier.padding(8.dp),
-                onAddItemButtonClicked = {})
+                    onAddItemButtonClicked = { navController.navigate(LaunchGivingHandScreen.AddAction.name)},
+                    onShowActonClickedAdmin = { action ->
+                        val actionId = action.id.toString()
+                        navController.navigate("${LaunchGivingHandScreen.ShowActionAdmin.name}/$actionId")
+                        topAppBarTitle = action.name})
             }
+
+            composable(route = LaunchGivingHandScreen.AddAction.name) {
+                AddActionScreen(
+                    onSubmitButtonClicked = { navController.navigate(LaunchGivingHandScreen.AdminActions.name) },
+                )
+            }
+
+
+
+
         }
     }
 }

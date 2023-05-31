@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey
     indices = [(Index(value = arrayOf("category_id")))])
 data class Action(
     @PrimaryKey
-    val id: Int,
+    val id: Int = 0,
     @NonNull
     @ColumnInfo(name="name") var name: String,
     @NonNull
