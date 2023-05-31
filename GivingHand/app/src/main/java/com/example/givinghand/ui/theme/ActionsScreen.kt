@@ -24,10 +24,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.Card
+import androidx.compose.material3.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.*
 
 import androidx.compose.runtime.Composable
@@ -52,7 +53,11 @@ fun ActionListItem(action: Action,
                    onShowActonClicked: (action: Action) -> Unit
 ){
     Card(
-        modifier = Modifier.padding(20.dp)
+        modifier = Modifier.padding(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Gray200,
+        ),
+
     ){
         Column(
             verticalArrangement = Arrangement.Center,

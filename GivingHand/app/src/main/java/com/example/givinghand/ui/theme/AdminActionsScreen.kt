@@ -40,9 +40,12 @@ import com.example.givinghand.data.Action
 import kotlinx.coroutines.flow.Flow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun AdminActionListItem(action: Action,
@@ -52,6 +55,9 @@ fun AdminActionListItem(action: Action,
 ){
     Card(
         modifier = Modifier.padding(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Gray200,
+        ),
     ){
         Column(
             verticalArrangement = Arrangement.Center,
