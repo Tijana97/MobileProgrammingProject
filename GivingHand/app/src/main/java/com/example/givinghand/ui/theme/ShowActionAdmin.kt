@@ -16,10 +16,14 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Text
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -32,24 +36,33 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.givinghand.R
 import com.example.givinghand.data.Action
+import com.example.givinghand.data.ActionDao
 import com.example.givinghand.data.Category
 import com.example.givinghand.datasource.DataSource
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 
 @Composable
-fun ShowActionAdmin(actionId: Int, modifier: Modifier = Modifier){
+fun ShowActionAdmin(actionId: Int,
+                    modifier: Modifier = Modifier,
+                    actionViewModel: ActionViewModel,
+                    actionDao: ActionDao,
+                    viewModelScope: CoroutineScope,
+){
     val actionViewModel: ActionViewModel = viewModel(
         factory = ActionViewModel.factory,
         viewModelStoreOwner = LocalViewModelStoreOwner.current!!
     )
     val actions by actionViewModel.getActionById(actionId).collectAsState(initial = emptyList())
     val action = actions.firstOrNull()
+    var showDialog by remember { mutableStateOf(false) }
     Column(
-
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier
+            .padding(8.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -61,7 +74,8 @@ fun ShowActionAdmin(actionId: Int, modifier: Modifier = Modifier){
         ){
             Image(painter = painterResource(id = R.drawable.social), contentDescription = null)
             Spacer(modifier = Modifier.width(16.dp))
-            Column(modifier = Modifier.fillMaxWidth()
+            Column(modifier = Modifier
+                .fillMaxWidth()
                 .padding(28.dp)){
                 if (action != null) {
                     Text(text = action.name, fontWeight = FontWeight.Bold)
@@ -71,30 +85,39 @@ fun ShowActionAdmin(actionId: Int, modifier: Modifier = Modifier){
                     Text(text = action.address)
                     Text(text = action.date)
                 }
-
             }
-
         }
 
-        androidx.compose.material3.Button(
-            onClick = {},
+        Button(
+            onClick = {showDialog = true},
             Modifier.widthIn(min = 250.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Green500)
         ) {
             Text("Edit Action")
         }
-        androidx.compose.material3.Button(
+        if (showDialog) {
+            if (action != null) {
+                EditActionDialog(
+                    action = action,
+                    onConfirm = { updatedAction ->
+                        viewModelScope.launch {
+                            actionDao.update(updatedAction)
+                        }
+                    },
+                    onDismiss = { showDialog = false }
+                )
+            }
+        }
+        Button(
             onClick = {},
             Modifier.widthIn(min = 250.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Green500)
-
         ) {
             Text("Delete Action")
         }
-
     }
-
 }
+
 private val sampleAction = Action(1, "Sample Description", 30, "Adresa", "desc", 6, "5-14-2023", 6)
 class ActionsFlowProviderr : PreviewParameterProvider<Flow<List<Action>>> {
     override val values: Sequence<Flow<List<Action>>> = sequenceOf(

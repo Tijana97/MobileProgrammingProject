@@ -10,29 +10,27 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.navArgument
-import com.example.givinghand.data.Action
-import com.example.givinghand.datasource.DataSource
-import com.example.givinghand.data.UserUIState
+import com.example.givinghand.data.ActionDao
+import com.example.givinghand.data.AppDatabase
 import com.example.givinghand.ui.theme.ActionList
 import com.example.givinghand.ui.theme.ActionViewModel
 import com.example.givinghand.ui.theme.AddActionScreen
@@ -43,11 +41,7 @@ import com.example.givinghand.ui.theme.LoginScreen
 import com.example.givinghand.ui.theme.ShowAction
 import com.example.givinghand.ui.theme.ShowActionAdmin
 import com.example.givinghand.ui.theme.SignUpScreen
-import com.example.givinghand.ui.theme.UserViewModel
 import com.example.givinghand.ui.theme.WelcomeScreen
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
-
 
 enum class LaunchGivingHandScreen() {
     Start(),
@@ -56,7 +50,7 @@ enum class LaunchGivingHandScreen() {
     AdminActions(),
     Signup(),
     ChooseCategory(),
-    EditAction(),
+    EditActionScreen(),
     AddAction(),
     AddActionType(),
     ShowAction(),
@@ -116,6 +110,11 @@ fun LaunchGivingHandApp() {
     val appBarTitle = stringResource(R.string.app_name)
     var topAppBarTitle by remember { mutableStateOf(appBarTitle) }
     val navController = rememberNavController()
+    val context = LocalContext.current
+    val database: AppDatabase = AppDatabase.getDatabase(context)
+    val actionDao: ActionDao = database.ActionDao()
+
+    val viewModelScope = rememberCoroutineScope()
 
     val onBackHandler = {
         topAppBarTitle = appBarTitle
@@ -130,8 +129,6 @@ fun LaunchGivingHandApp() {
                 title = topAppBarTitle,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 onBackClick = { onBackHandler() }
-
-
             )
         }
     ) { innerPadding ->
@@ -259,9 +256,10 @@ fun LaunchGivingHandApp() {
                 arguments = listOf(navArgument(tempActionAdminId) { defaultValue = "1" })
             ) { backStackEntry ->
                 val actionIdTemp = backStackEntry.arguments?.getString(tempActionAdminId)!!.toInt()
-                ShowActionAdmin(actionIdTemp, modifier = Modifier)
+                ShowActionAdmin(actionIdTemp, modifier = Modifier,
+                    actionViewModel = actionViewModel, actionDao = actionDao, viewModelScope = viewModelScope
+                )
             }
-
             val tempActionId = "temp"
             composable(
                 route = LaunchGivingHandScreen.ShowAction.name + "/{$tempActionId}",
@@ -286,9 +284,6 @@ fun LaunchGivingHandApp() {
                     onSubmitButtonClicked = { navController.navigate(LaunchGivingHandScreen.AdminActions.name) },
                 )
             }
-
-
-
 
         }
     }
