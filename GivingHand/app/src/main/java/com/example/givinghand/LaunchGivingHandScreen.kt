@@ -253,16 +253,23 @@ fun LaunchGivingHandApp() {
                         topAppBarTitle = action.name
                     })
             }
-            val tempActionId = "temp"
+            val tempActionAdminId = "temp"
             composable(
-                route = LaunchGivingHandScreen.ShowActionAdmin.name + "/{$tempActionId}",
-                arguments = listOf(navArgument(tempActionId) { defaultValue = "1" })
+                route = LaunchGivingHandScreen.ShowActionAdmin.name + "/{$tempActionAdminId}",
+                arguments = listOf(navArgument(tempActionAdminId) { defaultValue = "1" })
             ) { backStackEntry ->
-                val actionIdTemp = backStackEntry.arguments?.getString(tempActionId)!!.toInt()
+                val actionIdTemp = backStackEntry.arguments?.getString(tempActionAdminId)!!.toInt()
                 ShowActionAdmin(actionIdTemp, modifier = Modifier)
             }
 
-
+            val tempActionId = "temp"
+            composable(
+                route = LaunchGivingHandScreen.ShowAction.name + "/{$tempActionId}",
+                arguments = listOf(navArgument(tempActionId) { defaultValue = "1" })
+            ) { backStackEntry ->
+                val actionIdTemp = backStackEntry.arguments?.getString(tempActionId)!!.toInt()
+                ShowAction(actionIdTemp, modifier = Modifier)
+            }
 
             composable(route = LaunchGivingHandScreen.AdminActions.name) {
                 val actions = actionViewModel.getAllActions()

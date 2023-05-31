@@ -80,7 +80,7 @@ fun AdminActionListItem(action: Action,
                 ,
                 colors = ButtonDefaults.buttonColors(containerColor = Green500)
             ) {
-                Text("Go")
+                Text("View")
             }
             Spacer(modifier = Modifier.height(20.dp))
         }

@@ -84,7 +84,7 @@ fun ActionListItem(action: Action,
                 ,
                 colors = ButtonDefaults.buttonColors(containerColor = Green500)
             ) {
-                androidx.compose.material3.Text("Go")
+                androidx.compose.material3.Text("View")
             }
             Spacer(modifier = Modifier.height(20.dp))
         }
