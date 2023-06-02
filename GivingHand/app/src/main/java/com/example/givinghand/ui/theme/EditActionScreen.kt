@@ -162,7 +162,7 @@ fun EditActionDialogContent(
         TextField(
             value = newDate,
             onValueChange = onDateChange,
-            label = { Text("Date") },
+            label = { Text("Date and Time") },
             shape = RoundedCornerShape(20.dp),
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.LightGray, // Change background color

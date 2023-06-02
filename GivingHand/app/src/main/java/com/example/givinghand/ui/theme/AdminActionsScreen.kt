@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -46,12 +47,13 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.givinghand.data.ActionCategory
 
 @Composable
-fun AdminActionListItem(action: Action,
+fun AdminActionListItem(action: ActionCategory,
                         modifier: Modifier = Modifier,
                         onAddItemButtonClicked: () -> Unit,
-                        onShowActonClickedAdmin: (action: Action) -> Unit
+                        onShowActonClickedAdmin: (action: ActionCategory) -> Unit
 ){
     Card(
         modifier = Modifier.padding(20.dp),
@@ -64,8 +66,9 @@ fun AdminActionListItem(action: Action,
             horizontalAlignment = Alignment.CenterHorizontally) {
             Row(modifier = Modifier
                 .fillMaxWidth()
-                .padding(30.dp)){
-                Image(painter = painterResource(id = R.drawable.sos), contentDescription = null)
+                .padding(15.dp)){
+                Image(painter = painterResource(id = action.category_picture), contentDescription = null,
+                    modifier = Modifier.size(width = 100.dp, height = 100.dp))
                 Spacer(modifier = Modifier.width(16.dp))
                 Column(modifier = Modifier.fillMaxWidth()){
                     Text(
@@ -95,10 +98,10 @@ fun AdminActionListItem(action: Action,
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AdminActionList(actions: Flow<List<Action>>,
+fun AdminActionList(actions: Flow<List<ActionCategory>>,
                     modifier: Modifier = Modifier,
                     onAddItemButtonClicked: () -> Unit,
-                    onShowActonClickedAdmin: (action: Action) -> Unit
+                    onShowActonClickedAdmin: (action: ActionCategory) -> Unit
 ) {
     val visibleState = remember {
         MutableTransitionState(false).apply {

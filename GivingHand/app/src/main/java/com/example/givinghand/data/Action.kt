@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey
     onDelete = ForeignKey.NO_ACTION))],
     indices = [(Index(value = arrayOf("category_id")))])
 data class Action(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @NonNull
     @ColumnInfo(name="name") var name: String,

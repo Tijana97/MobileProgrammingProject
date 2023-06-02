@@ -7,16 +7,24 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.givinghand.GivingHandApplication
 import com.example.givinghand.data.Action
+import com.example.givinghand.data.ActionCategory
 import com.example.givinghand.data.ActionDao
 import kotlinx.coroutines.flow.Flow
+import java.util.Objects
 
 class ActionViewModel (private val actionDao: ActionDao): ViewModel() {
 
     fun getAllActions(): Flow<List<Action>> = actionDao.getAllAction()
 
+    fun getAllActionsWithCategories(): Flow<List<ActionCategory>> = actionDao.getAllActionsWithCategories()
+
     fun getActionById(id: Int): Flow<List<Action>> = actionDao.getActionById(id)
 
+    fun getActionByIdWithCategory(id: Int): Flow<List<ActionCategory>> = actionDao.getActionByIdWithCategory(id)
+
     fun getActionByCategory(category_id: Int): Flow<List<Action>> = actionDao.getActionsByCategoryId(category_id)
+
+    fun getActionByCategoryWithCategories(category_id: Int): Flow<List<ActionCategory>> = actionDao.getActionsByCategoryIdWithCategories(category_id)
 
     suspend fun insertAction(action: Action) = actionDao.insert(action)
 

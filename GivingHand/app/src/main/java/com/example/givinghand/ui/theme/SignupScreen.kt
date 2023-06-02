@@ -1,20 +1,15 @@
 package com.example.givinghand.ui.theme
 
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,35 +23,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.givinghand.R
-import com.example.givinghand.data.AppDatabase
 import com.example.givinghand.data.User
-import com.example.givinghand.datasource.DataSource.AuthorizedUsers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
+    userViewModel: UserViewModel,
     onSubmitButtonClicked: () -> Unit
 ) {
-    val userViewModel: UserViewModel = viewModel(
-        factory = UserViewModel.factory,
-        viewModelStoreOwner = LocalViewModelStoreOwner.current!!
-    )
+
     val loginMessage = remember { mutableStateOf("") }
 
     Column(
@@ -196,6 +182,7 @@ fun SignUpScreen(
                                 address = address.value.text,
                                 authorized = 0
                             )
+                            userViewModel.setUsername(user.username)
                             userViewModel.insertUser(user)
                             onSubmitButtonClicked()
                         }

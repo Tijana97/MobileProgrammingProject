@@ -15,6 +15,11 @@ class CategoryViewModel(private val categoryDao: CategoryDao): ViewModel() {
 
     fun getCategoryById(id: Int): Flow<List<Category>> = categoryDao.getCategoryById(id)
 
+    fun getCategoryByName(name: String): Flow<List<Category>> = categoryDao.getCategoryByName(name)
+
+    fun getAllCategoryNames(): Flow<List<String>> = categoryDao.getAllCategoriesNames()
+
+
     companion object {
         val factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

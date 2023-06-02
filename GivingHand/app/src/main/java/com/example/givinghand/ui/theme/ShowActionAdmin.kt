@@ -1,5 +1,6 @@
 package com.example.givinghand.ui.theme
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,14 +54,22 @@ fun ShowActionAdmin(actionId: Int,
                     actionViewModel: ActionViewModel,
                     actionDao: ActionDao,
                     viewModelScope: CoroutineScope,
+                    onDeleteButtonClicked: () -> Unit
 ){
     val actionViewModel: ActionViewModel = viewModel(
         factory = ActionViewModel.factory,
         viewModelStoreOwner = LocalViewModelStoreOwner.current!!
     )
+    val userActionViewModel: UserActionViewModel = viewModel(
+        factory = UserActionViewModel.factory,
+        viewModelStoreOwner = LocalViewModelStoreOwner.current!!
+    )
     val actions by actionViewModel.getActionById(actionId).collectAsState(initial = emptyList())
     val action = actions.firstOrNull()
+    val actionCategories by actionViewModel.getActionByIdWithCategory(actionId).collectAsState(initial = emptyList())
+    val actionCategory = actionCategories.firstOrNull()
     var showDialog by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -72,12 +82,12 @@ fun ShowActionAdmin(actionId: Int,
 
 
         ){
-            Image(painter = painterResource(id = R.drawable.social), contentDescription = null)
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .padding(28.dp)){
-                if (action != null) {
+            if (action != null && actionCategory !=null) {
+                Image(painter = painterResource(id = actionCategory.category_picture), contentDescription = null)
+                Spacer(modifier = Modifier.width(16.dp))
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(28.dp)){
                     Text(text = action.name, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(text = action.description)
@@ -109,7 +119,22 @@ fun ShowActionAdmin(actionId: Int,
             }
         }
         Button(
-            onClick = {},
+            onClick = {
+                      if(action != null){
+                          val userActionId = action.id
+                          userActionViewModel.DeleteUserActionsByActionId(userActionId)
+                          viewModelScope.launch {
+                              actionDao.delete(action)
+                          }
+                          onDeleteButtonClicked()
+                          Toast.makeText(
+                              context,
+                              "Action successfully deleted!",
+                              Toast.LENGTH_SHORT
+                          ).show()
+                      }
+
+            },
             Modifier.widthIn(min = 250.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Green500)
         ) {

@@ -16,6 +16,17 @@ import kotlinx.coroutines.flow.update
 
 class UserViewModel(private val userDao: UserDao) : ViewModel() {
 
+    private val _username = MutableStateFlow<String?>(null)
+    val username: StateFlow<String?> = _username
+
+    fun setUsername(username: String?) {
+        _username.value = username
+    }
+
+    fun getUserIdByUsername(username: String): Int = userDao.getUserIdByUsername(username = username)
+
+    fun getUserByUsername(username: String): Flow<List<User>> = userDao.getUserByUsername(username)
+
     fun getUserById(id:Int): Flow<List<User>> = userDao.getUser(id)
 
     fun getAllUsers() = userDao.getAllUsers()

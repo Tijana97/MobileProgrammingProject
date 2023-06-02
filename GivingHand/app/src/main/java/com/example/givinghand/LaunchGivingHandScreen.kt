@@ -2,14 +2,15 @@
 
 package com.example.givinghand
 
-import android.content.Context
-import androidx.annotation.StringRes
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -28,6 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.navArgument
 import com.example.givinghand.data.ActionDao
 import com.example.givinghand.data.AppDatabase
@@ -35,12 +37,16 @@ import com.example.givinghand.ui.theme.ActionList
 import com.example.givinghand.ui.theme.ActionViewModel
 import com.example.givinghand.ui.theme.AddActionScreen
 import com.example.givinghand.ui.theme.AdminActionList
+import com.example.givinghand.ui.theme.AdminLogoutScreen
 import com.example.givinghand.ui.theme.CategoriesScreen
 import com.example.givinghand.ui.theme.LoginAdminScreen
 import com.example.givinghand.ui.theme.LoginScreen
 import com.example.givinghand.ui.theme.ShowAction
 import com.example.givinghand.ui.theme.ShowActionAdmin
+import com.example.givinghand.ui.theme.ShowUserAction
 import com.example.givinghand.ui.theme.SignUpScreen
+import com.example.givinghand.ui.theme.UserActionsScreen
+import com.example.givinghand.ui.theme.UserViewModel
 import com.example.givinghand.ui.theme.WelcomeScreen
 
 enum class LaunchGivingHandScreen() {
@@ -52,7 +58,7 @@ enum class LaunchGivingHandScreen() {
     ChooseCategory(),
     EditActionScreen(),
     AddAction(),
-    AddActionType(),
+    AdminLogout(),
     ShowAction(),
     ShowActionAdmin(),
     DonateActions(),
@@ -61,6 +67,8 @@ enum class LaunchGivingHandScreen() {
     AnimalActions(),
     AllActions(),
     ShowUser(),
+    ShowUserAction(),
+
 
 }
 
@@ -70,35 +78,60 @@ fun LaunchGivingHandAppBar(
     title: String,
     canNavigateBack: Boolean,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
-
+    modifier: Modifier = Modifier,
+    isSignedIn: Boolean,
+    showUserProfile: () -> Unit,
+    showAdminProfile: () -> Unit,
+    navController: NavController,
+    isAdmin: Boolean
 ) {
-    if (canNavigateBack) {
-        TopAppBar(
-            title = { Text(title) },
-            navigationIcon = {
-                androidx.compose.material3.IconButton(onClick = onBackClick) {
+    val showBackButton = canNavigateBack
+            && navController.currentDestination?.route != LaunchGivingHandScreen.Start.name
+            && navController.currentDestination?.route != LaunchGivingHandScreen.ChooseCategory.name
+            && navController.currentDestination?.route != LaunchGivingHandScreen.AdminActions.name
+    val showActions = isSignedIn  &&
+            (navController.currentDestination?.route != LaunchGivingHandScreen.Login.name) &&
+            (navController.currentDestination?.route != LaunchGivingHandScreen.Signup.name) &&
+            (navController.currentDestination?.route != LaunchGivingHandScreen.Start.name)
+
+    TopAppBar(
+        title = { Text(title) },
+        navigationIcon = {
+            if (showBackButton) {
+                IconButton(onClick = onBackClick) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back"
-
                     )
-
                 }
-            },
-            modifier = modifier
-        )
-    } else {
-        TopAppBar(
-            title = { Text(title) },
-            modifier = modifier
-        )
-    }
-
+            }
+        },
+        actions = {
+            if (showActions) {
+                IconButton(onClick = showUserProfile) {
+                    Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = "User Profile"
+                    )
+                }
+            }
+            if (isAdmin) {
+                IconButton(onClick = showAdminProfile) {
+                    Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = "User Profile"
+                    )
+                }
+            }
+        },
+        modifier = modifier
+    )
 }
 
 
 
+
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun LaunchGivingHandApp() {
     // TODO: Create Controller and initialization
@@ -107,12 +140,18 @@ fun LaunchGivingHandApp() {
         factory = ActionViewModel.factory,
         viewModelStoreOwner = LocalViewModelStoreOwner.current!!
     )
+    val userViewModel: UserViewModel = viewModel(
+        factory = UserViewModel.factory,
+        viewModelStoreOwner = LocalViewModelStoreOwner.current!!
+    )
     val appBarTitle = stringResource(R.string.app_name)
     var topAppBarTitle by remember { mutableStateOf(appBarTitle) }
     val navController = rememberNavController()
     val context = LocalContext.current
     val database: AppDatabase = AppDatabase.getDatabase(context)
     val actionDao: ActionDao = database.ActionDao()
+    var signedIn by remember { mutableStateOf(false)   }
+    var admin by remember { mutableStateOf(false)   }
 
     val viewModelScope = rememberCoroutineScope()
 
@@ -128,7 +167,18 @@ fun LaunchGivingHandApp() {
             LaunchGivingHandAppBar(
                 title = topAppBarTitle,
                 canNavigateBack = navController.previousBackStackEntry != null,
-                onBackClick = { onBackHandler() }
+                onBackClick = { onBackHandler() },
+                isSignedIn = signedIn,
+                isAdmin = admin,
+                navController = navController,
+                showUserProfile = {
+                    navController.navigate(LaunchGivingHandScreen.ShowUser.name)
+                    topAppBarTitle = "Your Actions"
+                },
+                showAdminProfile = {
+                    navController.navigate(LaunchGivingHandScreen.AdminLogout.name)
+                    topAppBarTitle = "Admin Profile"
+                }
             )
         }
     ) { innerPadding ->
@@ -157,9 +207,12 @@ fun LaunchGivingHandApp() {
             }
 
             composable(route = LaunchGivingHandScreen.Login.name) {
-                LoginScreen(
+                LoginScreen(userViewModel = userViewModel,
                     onSubmitButtonClicked = {
-                        navController.navigate(LaunchGivingHandScreen.ChooseCategory.name)
+                        signedIn = true
+                        navController.navigate(LaunchGivingHandScreen.ChooseCategory.name) {
+                            popUpTo(LaunchGivingHandScreen.Start.name) { inclusive = true }
+                        }
                         topAppBarTitle = "Select Category"
                     }
                 )
@@ -167,6 +220,7 @@ fun LaunchGivingHandApp() {
             composable(route = LaunchGivingHandScreen.AdminLogin.name) {
                 LoginAdminScreen(
                     onSubmitButtonClicked = {
+                        admin = true
                         navController.navigate(LaunchGivingHandScreen.AdminActions.name)
                         topAppBarTitle = "Actions"
                     }
@@ -176,8 +230,12 @@ fun LaunchGivingHandApp() {
             composable(route = LaunchGivingHandScreen.Signup.name) {
 
                 SignUpScreen(
+                    userViewModel = userViewModel,
                     onSubmitButtonClicked = {
-                        navController.navigate(LaunchGivingHandScreen.ChooseCategory.name)
+                        signedIn = true
+                        navController.navigate(LaunchGivingHandScreen.ChooseCategory.name) {
+                            popUpTo(LaunchGivingHandScreen.Start.name) { inclusive = true }
+                        }
                         topAppBarTitle = "Select Category"
                     }
                 )
@@ -186,22 +244,32 @@ fun LaunchGivingHandApp() {
 
             composable(route = LaunchGivingHandScreen.ChooseCategory.name) {
                 CategoriesScreen(
-                    onAllActionsClicked = { navController.navigate(LaunchGivingHandScreen.AllActions.name)
-                        topAppBarTitle = "All Actions"},
-                    onDonateActionsClicked = { navController.navigate(LaunchGivingHandScreen.DonateActions.name)
-                        topAppBarTitle = "Donate Actions"},
-                    onAnimalCareActionsClicked = { navController.navigate(LaunchGivingHandScreen.AnimalActions.name)
-                        topAppBarTitle = "Animal Care Actions"},
-                    onEnvironmentalActionsClicked = { navController.navigate(LaunchGivingHandScreen.EnvironmentActions.name)
-                        topAppBarTitle = "Environmental Actions"},
-                    onSocialActionsClicked = { navController.navigate(LaunchGivingHandScreen.SocialActions.name)
-                        topAppBarTitle = "Social Actions"})
+                    onAllActionsClicked = {
+                        navController.navigate(LaunchGivingHandScreen.AllActions.name)
+                        topAppBarTitle = "All Actions"
+                    },
+                    onDonateActionsClicked = {
+                        navController.navigate(LaunchGivingHandScreen.DonateActions.name)
+                        topAppBarTitle = "Donate Actions"
+                    },
+                    onAnimalCareActionsClicked = {
+                        navController.navigate(LaunchGivingHandScreen.AnimalActions.name)
+                        topAppBarTitle = "Animal Care Actions"
+                    },
+                    onEnvironmentalActionsClicked = {
+                        navController.navigate(LaunchGivingHandScreen.EnvironmentActions.name)
+                        topAppBarTitle = "Environmental Actions"
+                    },
+                    onSocialActionsClicked = {
+                        navController.navigate(LaunchGivingHandScreen.SocialActions.name)
+                        topAppBarTitle = "Social Actions"
+                    })
             }
 
 
 
             composable(route = LaunchGivingHandScreen.AllActions.name) {
-                val actions = actionViewModel.getAllActions()
+                val actions = actionViewModel.getAllActionsWithCategories()
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
                         val actionId = action.id.toString()
@@ -211,7 +279,7 @@ fun LaunchGivingHandApp() {
             }
 
             composable(route = LaunchGivingHandScreen.DonateActions.name) {
-                val actions = actionViewModel.getActionByCategory(category_id = 1)
+                val actions = actionViewModel.getActionByCategoryWithCategories(category_id = 1)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
                         val actionId = action.id.toString()
@@ -221,7 +289,7 @@ fun LaunchGivingHandApp() {
             }
 
             composable(route = LaunchGivingHandScreen.AnimalActions.name) {
-                val actions = actionViewModel.getActionByCategory(category_id = 2)
+                val actions = actionViewModel.getActionByCategoryWithCategories(category_id = 2)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
                         val actionId = action.id.toString()
@@ -232,7 +300,7 @@ fun LaunchGivingHandApp() {
             }
 
             composable(route = LaunchGivingHandScreen.EnvironmentActions.name) {
-                val actions = actionViewModel.getActionByCategory(category_id = 3)
+                val actions = actionViewModel.getActionByCategoryWithCategories(category_id = 3)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
                         val actionId = action.id.toString()
@@ -242,7 +310,7 @@ fun LaunchGivingHandApp() {
             }
 
             composable(route = LaunchGivingHandScreen.SocialActions.name) {
-                val actions = actionViewModel.getActionByCategory(category_id = 4)
+                val actions = actionViewModel.getActionByCategoryWithCategories(category_id = 4)
                 ActionList(actions = actions, Modifier.padding(8.dp),
                     onShowActonClicked = { action ->
                         val actionId = action.id.toString()
@@ -256,8 +324,14 @@ fun LaunchGivingHandApp() {
                 arguments = listOf(navArgument(tempActionAdminId) { defaultValue = "1" })
             ) { backStackEntry ->
                 val actionIdTemp = backStackEntry.arguments?.getString(tempActionAdminId)!!.toInt()
-                ShowActionAdmin(actionIdTemp, modifier = Modifier,
-                    actionViewModel = actionViewModel, actionDao = actionDao, viewModelScope = viewModelScope
+                ShowActionAdmin(
+                    actionIdTemp,
+                    modifier = Modifier,
+                    actionViewModel = actionViewModel,
+                    actionDao = actionDao,
+                    viewModelScope = viewModelScope,
+                    onDeleteButtonClicked = {navController.navigate(LaunchGivingHandScreen.AdminActions.name)
+                    topAppBarTitle = "Actions"}
                 )
             }
             val tempActionId = "temp"
@@ -266,17 +340,19 @@ fun LaunchGivingHandApp() {
                 arguments = listOf(navArgument(tempActionId) { defaultValue = "1" })
             ) { backStackEntry ->
                 val actionIdTemp = backStackEntry.arguments?.getString(tempActionId)!!.toInt()
-                ShowAction(actionIdTemp, modifier = Modifier)
+                ShowAction(actionIdTemp, modifier = Modifier, userViewModel = userViewModel)
+
             }
 
             composable(route = LaunchGivingHandScreen.AdminActions.name) {
-                val actions = actionViewModel.getAllActions()
+                val actions = actionViewModel.getAllActionsWithCategories()
                 AdminActionList(actions = actions, Modifier.padding(8.dp),
-                    onAddItemButtonClicked = { navController.navigate(LaunchGivingHandScreen.AddAction.name)},
+                    onAddItemButtonClicked = { navController.navigate(LaunchGivingHandScreen.AddAction.name) },
                     onShowActonClickedAdmin = { action ->
                         val actionId = action.id.toString()
                         navController.navigate("${LaunchGivingHandScreen.ShowActionAdmin.name}/$actionId")
-                        topAppBarTitle = action.name})
+                        topAppBarTitle = action.name
+                    })
             }
 
             composable(route = LaunchGivingHandScreen.AddAction.name) {
@@ -285,6 +361,38 @@ fun LaunchGivingHandApp() {
                 )
             }
 
+            composable(route = LaunchGivingHandScreen.ShowUser.name) {
+                UserActionsScreen(userViewModel = userViewModel, onShowActonClicked = { action ->
+                    val actionId = action.id.toString()
+                    navController.navigate("${LaunchGivingHandScreen.ShowUserAction.name}/$actionId")
+                    topAppBarTitle = action.name
+                }, onLogoutButtonClicked = {
+                    userViewModel.setUsername(null)
+                    signedIn = false
+                    topAppBarTitle = appBarTitle
+                    navController.navigate(LaunchGivingHandScreen.Start.name)
+
+
+                })
+            }
+
+            composable(route = LaunchGivingHandScreen.ShowUserAction.name + "/{$tempActionId}",
+                arguments = listOf(navArgument(tempActionId) { defaultValue = "1" })
+            ) { backStackEntry ->
+                val actionIdTemp = backStackEntry.arguments?.getString(tempActionId)!!.toInt()
+                ShowUserAction(actionIdTemp, modifier = Modifier, userViewModel = userViewModel,
+                    onApplyForOtherActionsClicked = { navController.navigate(LaunchGivingHandScreen.ChooseCategory.name) })
+            }
+
+            composable(LaunchGivingHandScreen.AdminLogout.name) {
+                AdminLogoutScreen(onAdminLogoutButtonClicked = {
+                    admin = false
+                    topAppBarTitle = appBarTitle
+                    navController.navigate(LaunchGivingHandScreen.Start.name)
+                })
+            }
         }
+
+
     }
 }
