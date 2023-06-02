@@ -119,7 +119,12 @@ fun UserActionList(actions: List<ActionCategory>,
         exit = fadeOut(),
         modifier = Modifier
     ) {
-        Column() {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             androidx.compose.material3.Button(
                 onClick = onLogoutButtonClicked,
                 Modifier

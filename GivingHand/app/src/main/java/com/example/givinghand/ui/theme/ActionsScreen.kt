@@ -40,12 +40,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.givinghand.LaunchGivingHandScreen
 import com.example.givinghand.R
 import com.example.givinghand.data.Action
 import com.example.givinghand.data.ActionCategory
+import com.example.givinghand.data.Category
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -60,10 +63,14 @@ fun ActionListItem(action: ActionCategory,
         ),
 
     ){
+
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+
+            Spacer(modifier = Modifier.padding(10.dp))
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp)){

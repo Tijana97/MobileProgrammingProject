@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GivingHand</string>
+    <string name="app_name"></string>
     <string name="back_button">Back</string>
     <string name="log_in">Log In</string>
     <string name="admin_log_in">Log In as Admin</string>

@@ -92,7 +92,8 @@ fun LaunchGivingHandAppBar(
     val showActions = isSignedIn  &&
             (navController.currentDestination?.route != LaunchGivingHandScreen.Login.name) &&
             (navController.currentDestination?.route != LaunchGivingHandScreen.Signup.name) &&
-            (navController.currentDestination?.route != LaunchGivingHandScreen.Start.name)
+            (navController.currentDestination?.route != LaunchGivingHandScreen.Start.name) &&
+            (navController.currentDestination?.route != LaunchGivingHandScreen.AdminLogout.name)
 
     TopAppBar(
         title = { Text(title) },
@@ -107,7 +108,7 @@ fun LaunchGivingHandAppBar(
             }
         },
         actions = {
-            if (showActions) {
+            if (showActions && !isAdmin) {
                 IconButton(onClick = showUserProfile) {
                     Icon(
                         imageVector = Icons.Filled.Person,
@@ -193,15 +194,15 @@ fun LaunchGivingHandApp() {
                 WelcomeScreen(
                     onLoginButtonClicked = {
                         navController.navigate(LaunchGivingHandScreen.Login.name)
-                        topAppBarTitle = "Log In"
+                        topAppBarTitle = ""
                     },
                     onLoginAdminButtonClicked = {
                         navController.navigate(LaunchGivingHandScreen.AdminLogin.name)
-                        topAppBarTitle = "Log In as Admin"
+                        topAppBarTitle = ""
                     },
                     onSignupButtonClicked = {
                         navController.navigate(LaunchGivingHandScreen.Signup.name)
-                        topAppBarTitle = "Sign Up"
+                        topAppBarTitle = ""
                     }
                 )
             }
@@ -213,7 +214,7 @@ fun LaunchGivingHandApp() {
                         navController.navigate(LaunchGivingHandScreen.ChooseCategory.name) {
                             popUpTo(LaunchGivingHandScreen.Start.name) { inclusive = true }
                         }
-                        topAppBarTitle = "Select Category"
+                        topAppBarTitle = ""
                     }
                 )
             }
@@ -222,13 +223,12 @@ fun LaunchGivingHandApp() {
                     onSubmitButtonClicked = {
                         admin = true
                         navController.navigate(LaunchGivingHandScreen.AdminActions.name)
-                        topAppBarTitle = "Actions"
+                        topAppBarTitle = ""
                     }
                 )
             }
 
             composable(route = LaunchGivingHandScreen.Signup.name) {
-
                 SignUpScreen(
                     userViewModel = userViewModel,
                     onSubmitButtonClicked = {
@@ -236,7 +236,7 @@ fun LaunchGivingHandApp() {
                         navController.navigate(LaunchGivingHandScreen.ChooseCategory.name) {
                             popUpTo(LaunchGivingHandScreen.Start.name) { inclusive = true }
                         }
-                        topAppBarTitle = "Select Category"
+                        topAppBarTitle = ""
                     }
                 )
             }
@@ -357,7 +357,8 @@ fun LaunchGivingHandApp() {
 
             composable(route = LaunchGivingHandScreen.AddAction.name) {
                 AddActionScreen(
-                    onSubmitButtonClicked = { navController.navigate(LaunchGivingHandScreen.AdminActions.name) },
+                    onSubmitButtonClicked = { navController.navigate(LaunchGivingHandScreen.AdminActions.name)
+                                            topAppBarTitle = "Add Action"},
                 )
             }
 

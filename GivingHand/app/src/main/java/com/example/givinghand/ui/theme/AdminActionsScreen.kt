@@ -45,6 +45,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterStart
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.givinghand.data.ActionCategory
@@ -119,7 +120,20 @@ fun AdminActionList(actions: Flow<List<ActionCategory>>,
         exit = fadeOut(),
         modifier = Modifier
     ) {
-        Column() {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "All Actions",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp
+                )
+            )
+            Spacer(modifier = Modifier.padding(10.dp))
             androidx.compose.material3.Button(
                 onClick = onAddItemButtonClicked,
                 Modifier

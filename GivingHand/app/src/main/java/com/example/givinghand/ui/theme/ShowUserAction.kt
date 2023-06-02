@@ -64,10 +64,11 @@ onApplyForOtherActionsClicked: () -> Unit){
             if (action != null) {
                 Image(painter = painterResource(id = action.category_picture), contentDescription = null)
                 Spacer(modifier = Modifier.width(16.dp))
-                Column(modifier = Modifier
+                Column(
+                    modifier = Modifier
                     .fillMaxWidth()
-                    .padding(28.dp)){
-
+                    .padding(28.dp),
+                ){
                     Text(
                         text = action.name,
                         fontWeight = FontWeight.Bold
