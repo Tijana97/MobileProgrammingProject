@@ -2,9 +2,7 @@ package com.example.givinghand
 
 import android.app.Application
 import com.example.givinghand.data.AppDatabase
-import com.example.givinghand.data.CategoryDao
 import com.example.givinghand.datasource.DataSource
-import com.example.givinghand.ui.theme.CategoryViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

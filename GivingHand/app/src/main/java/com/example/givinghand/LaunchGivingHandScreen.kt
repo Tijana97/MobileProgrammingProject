@@ -4,7 +4,6 @@ package com.example.givinghand
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.padding
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
@@ -15,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +30,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.example.givinghand.data.ActionDao
 import com.example.givinghand.data.AppDatabase
@@ -49,25 +50,24 @@ import com.example.givinghand.ui.theme.UserActionsScreen
 import com.example.givinghand.ui.theme.UserViewModel
 import com.example.givinghand.ui.theme.WelcomeScreen
 
-enum class LaunchGivingHandScreen() {
-    Start(),
-    Login(),
-    AdminLogin(),
-    AdminActions(),
-    Signup(),
-    ChooseCategory(),
-    EditActionScreen(),
-    AddAction(),
-    AdminLogout(),
-    ShowAction(),
-    ShowActionAdmin(),
-    DonateActions(),
-    SocialActions(),
-    EnvironmentActions(),
-    AnimalActions(),
-    AllActions(),
-    ShowUser(),
-    ShowUserAction(),
+enum class LaunchGivingHandScreen {
+    Start,
+    Login,
+    AdminLogin,
+    AdminActions,
+    Signup,
+    ChooseCategory,
+    AddAction,
+    AdminLogout,
+    ShowAction,
+    ShowActionAdmin,
+    DonateActions,
+    SocialActions,
+    EnvironmentActions,
+    AnimalActions,
+    AllActions,
+    ShowUser,
+    ShowUserAction,
 
 
 }
@@ -89,6 +89,9 @@ fun LaunchGivingHandAppBar(
             && navController.currentDestination?.route != LaunchGivingHandScreen.Start.name
             && navController.currentDestination?.route != LaunchGivingHandScreen.ChooseCategory.name
             && navController.currentDestination?.route != LaunchGivingHandScreen.AdminActions.name
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    LaunchedEffect(currentBackStackEntry){
+    }
     val showActions = isSignedIn  &&
             (navController.currentDestination?.route != LaunchGivingHandScreen.Login.name) &&
             (navController.currentDestination?.route != LaunchGivingHandScreen.Signup.name) &&
@@ -213,8 +216,9 @@ fun LaunchGivingHandApp() {
                         signedIn = true
                         navController.navigate(LaunchGivingHandScreen.ChooseCategory.name) {
                             popUpTo(LaunchGivingHandScreen.Start.name) { inclusive = true }
+                            topAppBarTitle = ""
                         }
-                        topAppBarTitle = ""
+
                     }
                 )
             }
@@ -235,8 +239,8 @@ fun LaunchGivingHandApp() {
                         signedIn = true
                         navController.navigate(LaunchGivingHandScreen.ChooseCategory.name) {
                             popUpTo(LaunchGivingHandScreen.Start.name) { inclusive = true }
+                            topAppBarTitle = ""
                         }
-                        topAppBarTitle = ""
                     }
                 )
             }
@@ -295,7 +299,6 @@ fun LaunchGivingHandApp() {
                         val actionId = action.id.toString()
                         navController.navigate("${LaunchGivingHandScreen.ShowAction.name}/$actionId")
                         topAppBarTitle = action.name
-
                     })
             }
 
@@ -341,7 +344,6 @@ fun LaunchGivingHandApp() {
             ) { backStackEntry ->
                 val actionIdTemp = backStackEntry.arguments?.getString(tempActionId)!!.toInt()
                 ShowAction(actionIdTemp, modifier = Modifier, userViewModel = userViewModel)
-
             }
 
             composable(route = LaunchGivingHandScreen.AdminActions.name) {
@@ -372,8 +374,6 @@ fun LaunchGivingHandApp() {
                     signedIn = false
                     topAppBarTitle = appBarTitle
                     navController.navigate(LaunchGivingHandScreen.Start.name)
-
-
                 })
             }
 
@@ -382,7 +382,9 @@ fun LaunchGivingHandApp() {
             ) { backStackEntry ->
                 val actionIdTemp = backStackEntry.arguments?.getString(tempActionId)!!.toInt()
                 ShowUserAction(actionIdTemp, modifier = Modifier, userViewModel = userViewModel,
-                    onApplyForOtherActionsClicked = { navController.navigate(LaunchGivingHandScreen.ChooseCategory.name) })
+                    onApplyForOtherActionsClicked = { navController.navigate(LaunchGivingHandScreen.ChooseCategory.name){
+                        topAppBarTitle = ""
+                    } })
             }
 
             composable(LaunchGivingHandScreen.AdminLogout.name) {

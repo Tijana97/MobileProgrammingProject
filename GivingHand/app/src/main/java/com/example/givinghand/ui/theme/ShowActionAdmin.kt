@@ -124,7 +124,7 @@ fun ShowActionAdmin(actionId: Int,
                           val userActionId = action.id
                           userActionViewModel.DeleteUserActionsByActionId(userActionId)
                           viewModelScope.launch {
-                              actionDao.delete(action)
+                              actionViewModel.deleteAction(action)
                           }
                           onDeleteButtonClicked()
                           Toast.makeText(
