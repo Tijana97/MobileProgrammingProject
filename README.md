@@ -14,3 +14,11 @@ For accessing the admin profiles you can use the following credentials:
    password: test123
 3. username: aminatpkvc     
    password: testbest
+   
+Authors:<br/>
+   [Sara Nalo](https://github.com/nalosara)<br/>
+   [Amina Tupković](https://github.com/aminatupkovic)<br/>
+   [Tijana Burazorović](https://github.com/Tijana97)
+
+
+   
